@@ -20,9 +20,11 @@ import okhttp3.Response;
 
 public class Test {
     public static void main(String[] args){
-        String a = "程序设计、算法与数据结构（二）";
-        String b = "高等数学";
-        System.out.println(a.length()+"  "+b.length());
+        int[] a = {0,1,2,3,4,5,6,7,8,9};
+        for(int b:a){
+            int c = b%4;
+            System.out.println(c);
+        }
     }
 
 }
