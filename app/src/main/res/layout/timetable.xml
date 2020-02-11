@@ -11,9 +11,29 @@
         <Spinner android:id="@+id/timetableSpinner1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <Spinner android:id="@+id/timetableSpinner2"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="第"
+            android:layout_marginLeft="10dp"
+            android:textSize="17sp"/>
+        <TextView
+            android:id="@+id/text_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="周"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="非本周"
+            android:layout_marginLeft="15dp"
+            android:textSize="17sp"/>
     </LinearLayout>
     <!--<ScrollView-->
         <!--android:layout_width="match_parent"-->

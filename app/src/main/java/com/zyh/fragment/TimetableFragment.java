@@ -19,8 +19,30 @@ import android.widget.TextView;
 import com.zyh.activities.MainActivity;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
+import com.zyh.fragment.timetableFragment.TestFragment;
+import com.zyh.fragment.timetableFragment.TimetableFragment1;
+import com.zyh.fragment.timetableFragment.TimetableFragment10;
+import com.zyh.fragment.timetableFragment.TimetableFragment11;
+import com.zyh.fragment.timetableFragment.TimetableFragment12;
+import com.zyh.fragment.timetableFragment.TimetableFragment13;
+import com.zyh.fragment.timetableFragment.TimetableFragment14;
+import com.zyh.fragment.timetableFragment.TimetableFragment15;
+import com.zyh.fragment.timetableFragment.TimetableFragment16;
+import com.zyh.fragment.timetableFragment.TimetableFragment17;
+import com.zyh.fragment.timetableFragment.TimetableFragment18;
+import com.zyh.fragment.timetableFragment.TimetableFragment19;
+import com.zyh.fragment.timetableFragment.TimetableFragment2;
+import com.zyh.fragment.timetableFragment.TimetableFragment20;
+import com.zyh.fragment.timetableFragment.TimetableFragment3;
+import com.zyh.fragment.timetableFragment.TimetableFragment4;
+import com.zyh.fragment.timetableFragment.TimetableFragment5;
+import com.zyh.fragment.timetableFragment.TimetableFragment6;
+import com.zyh.fragment.timetableFragment.TimetableFragment7;
+import com.zyh.fragment.timetableFragment.TimetableFragment8;
+import com.zyh.fragment.timetableFragment.TimetableFragment9;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -30,47 +52,36 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class TimetableFragment extends Fragment {
-    private LoginBean loginBean;
+    public LoginBean loginBean;
     private Spinner spinner1;
-    private Spinner spinner2;
     private ArrayAdapter<String> adapter1;
-    private ArrayAdapter<String> adapter2;
     private String[] datas;
     private String[] weeks;
-    private String semester;
-    private String week;
-
+    public String semester;
+    public String week = "ssss";
+    public String[] context = {"abc","def","ghi","klm"};
+    public int getTimetableNum = 0;
+    public List<String> timetableList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+            , "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21");
+    private TextView weekText;
     //声明ViewPager
     private ViewPager mViewPager;
     //适配器
     private FragmentPagerAdapter mAdapter;
     //装载Fragment的集合
     private List<Fragment> mFragments;
-
-    //四个Tab对应的布局
-    private LinearLayout mTabWeixin;
-    private LinearLayout mTabFrd;
-    private LinearLayout mTabAddress;
-    private LinearLayout mTabSetting;
-
-    //四个Tab对应的ImageButton
-    private ImageButton mImgWeixin;
-    private ImageButton mImgFrd;
-    private ImageButton mImgAddress;
-    private ImageButton mImgSetting;
-    private TextView textView;
+    public Boolean[] isFinished = {false,false,false,false,false,false,false,false,false,false,false
+            ,false,false,false,false,false,false,false,false,false,false};
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.timetable, container, false);
-        View view1 = inflater.inflate(R.layout.tab1, container, false);
-        textView = view1.findViewById(R.id.abcd);
         mViewPager = (ViewPager)view.findViewById(R.id.id_viewpager1);
+        weekText = (TextView)view.findViewById(R.id.text_week);
         initDatas();//初始化数据
 
         spinner1 = (Spinner)view.findViewById(R.id.timetableSpinner1);
-        spinner2 = (Spinner)view.findViewById(R.id.timetableSpinner2);
         MainActivity mainActivity = (MainActivity)getActivity();
         //spinner1
         //需要修改！！！！！！！！！！！！
@@ -85,6 +96,7 @@ public class TimetableFragment extends Fragment {
             Log.d("GradeFragment","ActionBegin: datas equals null!!!");
         }
         loginBean = mainActivity.loginBean;
+        semester = loginBean.getData().getNowXueqi();
         adapter1 = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         if (spinner1==null){
@@ -96,47 +108,52 @@ public class TimetableFragment extends Fragment {
         spinner1.setAdapter(adapter1);
         spinner1.setOnItemSelectedListener(new SpinnerSelectedListener1());
         ////////////////////////////////////
-        spinner1.setSelection(1,true);
+        for(int i=0;i<datas.length;i++){
+            if (datas[i].equals(semester)){
+                spinner1.setSelection(i,true);
+            }
+        }
         //////////////////////////////////
         spinner1.setVisibility(View.VISIBLE);
 
         //spinner2
-        String[] weekss = {"1","2","3","4","5","6","7","8",
+        String[] weekss = {"0","1","2","3","4","5","6","7","8",
                 "9","10","11","12","13","14","15","16","17","18","19","20"};
         weeks = weekss;
-        adapter2 = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,weeks);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new SpinnerSelectedListener2());
-        ////////////////////////////////////
-        spinner2.setSelection(1,true);
-        //////////////////////////////////
-        spinner2.setVisibility(View.VISIBLE);
-
         Log.d("TimetableFragment","ActionBegin");
         return view;
     }
 
-    private void initViews() {
-        mViewPager = (ViewPager) getActivity().findViewById(R.id.id_viewpager1);
-
-    }
-
     private void initDatas() {
         mFragments = new ArrayList<>();
-        //将四个Fragment加入集合中
-        mFragments.add(new WeixinFragment());
-        mFragments.add(new WeixinFragment());
-        mFragments.add(new WeixinFragment());
-        mFragments.add(new WeixinFragment());
-//        mFragments.add(new FrdFragment());
-//        mFragments.add(new AddressFragment());
-//        mFragments.add(new SettingFragment());
+        mFragments.add(new TestFragment());
+        mFragments.add(new TimetableFragment1());
+        mFragments.add(new TimetableFragment2());
+        mFragments.add(new TimetableFragment3());
+        mFragments.add(new TimetableFragment4());
+        mFragments.add(new TimetableFragment5());
+        mFragments.add(new TimetableFragment6());
+        mFragments.add(new TimetableFragment7());
+        mFragments.add(new TimetableFragment8());
+        mFragments.add(new TimetableFragment9());
+        mFragments.add(new TimetableFragment10());
+        mFragments.add(new TimetableFragment11());
+        mFragments.add(new TimetableFragment12());
+        mFragments.add(new TimetableFragment13());
+        mFragments.add(new TimetableFragment14());
+        mFragments.add(new TimetableFragment15());
+        mFragments.add(new TimetableFragment16());
+        mFragments.add(new TimetableFragment17());
+        mFragments.add(new TimetableFragment18());
+        mFragments.add(new TimetableFragment19());
+        mFragments.add(new TimetableFragment20());
+
 
         //初始化适配器
         mAdapter = new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {//从集合中获取对应位置的Fragment
+                week = String.valueOf(position);
                 return mFragments.get(position);
             }
 
@@ -162,6 +179,8 @@ public class TimetableFragment extends Fragment {
             //页面选中事件
             @Override
             public void onPageSelected(int position) {
+                int nowWeek = position+1;
+                weekText.setText(String.valueOf(nowWeek));
                 mViewPager.setCurrentItem(position);
             }
 
@@ -178,7 +197,13 @@ public class TimetableFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             semester = datas[position];
-            postTimetable(semester,week);
+            for(int i=0;i<isFinished.length;i++){
+                isFinished[i] = false;
+            }
+            weekText.setText("1");
+            initDatas();
+//            mViewPager.setCurrentItem(18);
+//            mViewPager.setCurrentItem(0);
         }
 
         @Override
@@ -186,53 +211,5 @@ public class TimetableFragment extends Fragment {
 
         }
     }
-    class SpinnerSelectedListener2 implements AdapterView.OnItemSelectedListener{
 
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            week = weeks[position];
-            postTimetable(semester,week);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    }
-    private void postTimetable(final String semester, final String week) {
-        final String cookie = loginBean.getData().getCookie();
-        final String token = loginBean.getData().getToken();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("cookie",cookie)
-                            .add("xueqi",semester)
-                            .add("zc",week)
-                            .build();
-                    Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/getCourse")
-                            .post(requestBody)
-                            .addHeader("token",token)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    ShowMsg(semester+" "+week+" "+responseData);
-                }catch (Exception e) {
-                    Log.d("okHttpError","okHttpError");
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-    private void ShowMsg(final String a){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                textView.setText(a);
-            }
-        });
-    }
 }
