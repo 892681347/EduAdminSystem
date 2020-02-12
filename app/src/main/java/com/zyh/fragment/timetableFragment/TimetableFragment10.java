@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
+import com.zyh.utills.Utills;
 
 import java.util.List;
 
@@ -38,8 +39,7 @@ public class TimetableFragment10 extends Fragment {
         if(!((TimetableFragment) timetableFragment).isFinished[10]){
             postTimetable(((TimetableFragment) timetableFragment).semester,"10");
         }
-        while(!((TimetableFragment) timetableFragment).isFinished[10]){}
-        textView.setText(((TimetableFragment) timetableFragment).timetableList.get(10));
+        Utills.show(getActivity(),timetableFragment,textView,10);
         return view;
     }
     public TimetableFragment getTimetableFragmeent(){

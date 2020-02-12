@@ -16,6 +16,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/table_month"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -38,6 +39,7 @@
                 android:text="一"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Mondaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="23"
@@ -55,6 +57,7 @@
                 android:text="二"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Tuesdaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="24"
@@ -72,6 +75,7 @@
                 android:text="三"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Wednesdaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="25"
@@ -89,6 +93,7 @@
                 android:text="四"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Thursdaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="26"
@@ -106,6 +111,7 @@
                 android:text="五"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Fridaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="27"
@@ -123,6 +129,7 @@
                 android:text="六"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Saturdaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="28"
@@ -140,6 +147,7 @@
                 android:text="日"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/table_Sundaydate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="29"
@@ -291,6 +299,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_1_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -332,10 +341,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_1_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -369,11 +380,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_1_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -405,11 +418,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_1_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -441,11 +456,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_1_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -477,11 +494,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_1_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -559,6 +578,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_2_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -600,10 +620,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_2_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -637,11 +659,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_2_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -673,11 +697,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_2_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -709,11 +735,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_2_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -745,11 +773,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_2_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -827,6 +857,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_3_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -868,10 +899,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_3_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -905,11 +938,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_3_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -941,11 +976,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_3_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -977,11 +1014,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_3_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1013,11 +1052,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_3_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1095,6 +1136,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_4_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -1136,10 +1178,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_4_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1173,11 +1217,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_4_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1209,11 +1255,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_4_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1245,11 +1293,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_4_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1281,11 +1331,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_4_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1363,6 +1415,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_5_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -1404,10 +1457,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_5_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1441,11 +1496,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_5_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1477,11 +1534,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_5_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1513,11 +1572,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_5_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1549,11 +1610,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_5_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1631,6 +1694,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_6_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -1672,10 +1736,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_6_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1709,11 +1775,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_6_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1745,11 +1813,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_6_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1781,11 +1851,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_6_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1817,11 +1889,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_6_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1899,6 +1973,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                     <android.support.v7.widget.CardView
+                        android:id="@+id/course_7_34"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/course_item_layout_height2"
                         android:layout_marginTop="@dimen/course_item_margintop"
@@ -1940,10 +2015,12 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_7_1"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4d3900"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1977,11 +2054,13 @@
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_7_2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#f400a1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -2013,11 +2092,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_7_3"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#daa520"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -2049,11 +2130,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_7_4"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#4169e1"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -2085,11 +2168,13 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                         <android.support.v7.widget.CardView
+                            android:id="@+id/course_7_5"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/course_item_layout_height"
                             android:layout_marginTop="@dimen/course_item_margintop"
                             app:cardCornerRadius="5dp"
                             app:cardBackgroundColor="#b509ff"
+                            android:visibility="invisible"
                             android:alpha="0.7">
                             <LinearLayout
                                 android:layout_width="match_parent"

@@ -38,8 +38,8 @@ public class TimetableFragment12 extends Fragment {
         if(!((TimetableFragment) timetableFragment).isFinished[12]){
             postTimetable(((TimetableFragment) timetableFragment).semester,"12");
         }
-        while(!((TimetableFragment) timetableFragment).isFinished[12]){}
-        textView.setText(((TimetableFragment) timetableFragment).timetableList.get(12));
+//        while(!((TimetableFragment) timetableFragment).isFinished[12]){}
+//        textView.setText(((TimetableFragment) timetableFragment).timetableList.get(12));
         return view;
     }
     public TimetableFragment getTimetableFragmeent(){

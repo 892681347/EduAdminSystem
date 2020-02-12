@@ -20,11 +20,8 @@ import okhttp3.Response;
 
 public class Test {
     public static void main(String[] args){
-        int[] a = {0,1,2,3,4,5,6,7,8,9};
-        for(int b:a){
-            int c = b%4;
-            System.out.println(c);
-        }
+        String a = "9-12(周)[05-06-07-1]";
+        System.out.println(a.contains("05-06-07-0"));
     }
 
 }

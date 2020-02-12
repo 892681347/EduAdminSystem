@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
+import com.zyh.utills.Utills;
 
 import java.util.List;
 
@@ -36,12 +37,13 @@ public class TimetableFragment2 extends Fragment {
         timetableFragment = getTimetableFragmeent();
         loginBean = ((TimetableFragment) timetableFragment).loginBean;
         if(!((TimetableFragment) timetableFragment).isFinished[2]){
+            Log.d("timetableFragment2","postTimetable1");
             postTimetable(((TimetableFragment) timetableFragment).semester,"2");
         }
-        while(!((TimetableFragment) timetableFragment).isFinished[2]){}
-        textView.setText(((TimetableFragment) timetableFragment).timetableList.get(2));
+        Utills.show(getActivity(),timetableFragment,textView,2);
         return view;
     }
+
     public TimetableFragment getTimetableFragmeent(){
         Fragment timetableFragment = null;
         List<Fragment> list=(List<Fragment>) TimetableFragment2.this.getFragmentManager().getFragments();
@@ -81,7 +83,8 @@ public class TimetableFragment2 extends Fragment {
                     if (((TimetableFragment)timetableFragment).getTimetableNum==4){
                         Log.d("finished","Get All Timetable!");
                     }
-                    ((TimetableFragment) timetableFragment).isFinished[2] = true;
+                    Log.d("timetableFragment2","postTimetable2");
+                    ((TimetableFragment) timetableFragment).isFinished[nowWeek] = true;
                 }catch (Exception e) {
                     Log.d("okHttpError","okHttpError");
                     e.printStackTrace();

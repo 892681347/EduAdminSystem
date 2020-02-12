@@ -11,15 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.zyh.activities.MainActivity;
+import com.zyh.beans.CourseBean;
 import com.zyh.beans.LoginBean;
-import com.zyh.fragment.R;
-import com.zyh.fragment.timetableFragment.TestFragment;
 import com.zyh.fragment.timetableFragment.TimetableFragment1;
 import com.zyh.fragment.timetableFragment.TimetableFragment10;
 import com.zyh.fragment.timetableFragment.TimetableFragment11;
@@ -45,12 +42,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 public class TimetableFragment extends Fragment {
     public LoginBean loginBean;
     private Spinner spinner1;
@@ -61,8 +52,12 @@ public class TimetableFragment extends Fragment {
     public String week = "ssss";
     public String[] context = {"abc","def","ghi","klm"};
     public int getTimetableNum = 0;
-    public List<String> timetableList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-            , "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21");
+    public List<String> timetableList = Arrays.asList(null,null,null,null,null,null,null,null,null
+            ,null,null,null,null,null,null,null,null,null,null,null,null);
+//    ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+//            , "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21")
+    public List<List<List<CourseBean.Course>>> courseLists = Arrays.asList(null,null,null,null,null,null,null,null,null
+        ,null,null,null,null,null,null,null,null,null,null,null,null);
     private TextView weekText;
     //声明ViewPager
     private ViewPager mViewPager;
@@ -126,7 +121,7 @@ public class TimetableFragment extends Fragment {
 
     private void initDatas() {
         mFragments = new ArrayList<>();
-        mFragments.add(new TestFragment());
+//        mFragments.add(new TestFragment());
         mFragments.add(new TimetableFragment1());
         mFragments.add(new TimetableFragment2());
         mFragments.add(new TimetableFragment3());
