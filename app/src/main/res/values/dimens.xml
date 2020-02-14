@@ -1,6 +1,6 @@
 <resources>
     <!-- table.xml页面中左边上面的月份、下面的节次的layout_width -->
-    <dimen name="table_left_width">14dp</dimen>
+    <dimen name="table_left_width">20dp</dimen>
     <!-- table.xml页面中每节课信息的textsize -->
     <dimen name="table_context_textsize">12sp</dimen>
     <!-- table.xml页面中每天的上面标题和下面每个课程CardView的marginLeft -->

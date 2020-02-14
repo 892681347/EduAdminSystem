@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -15,7 +16,14 @@ import com.zyh.beans.CourseBean;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
+import com.zyh.fragment.timetableFragment.TimetableFragment1;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 import okhttp3.FormBody;
@@ -24,11 +32,158 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.zyh.utills.WeekUtil.getWeekDays;
+
 public class Utills {
     private static int[] colors = {0x64ff00ff,0xb44d3900,0xb4f400a1,0xb4daa520,0xb44169e1,0xb4b509ff};
 
     public static int randomColor(){
         return colors[new Random().nextInt(colors.length)];
+    }
+
+    public static void setCurrentSemester(String[] datas,String semester,Spinner spinner){
+        for(int i=0;i<datas.length;i++){
+            if (datas[i].equals(semester)){
+                spinner.setSelection(i,true);
+            }
+        }
+    }
+
+    public static TimetableFragment getTimetableFragmeent(Fragment fragment){
+        Fragment timetableFragment = null;
+        List<Fragment>list=(List<Fragment>) fragment.getFragmentManager().getFragments();
+        for(Fragment f:list){
+            if(f!=null && f instanceof TimetableFragment){
+                timetableFragment = f;
+                break;
+            }
+        }
+        return (TimetableFragment)timetableFragment;
+    }
+
+    public static void showTimetable(final Fragment timetableFragment,final FragmentActivity activity, final List<List<CourseBean.Course>> courseList,
+                                     final TextView month,final TextView monthWord,final TextView[] weekDate,
+                                     final Course[][] courseMsgs,final Course[][] course2Msgs,final CardView[][] courseItems
+            ,final CardView[][] course2Items,final String nowWeek,
+                                     final String semester, final String originalSemester, final int index){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!((TimetableFragment) timetableFragment).isFinished[index]){}
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utills.showCourseMsgOnUi(activity,
+                                ((TimetableFragment) timetableFragment).courseLists.get(index),
+                                month,monthWord,weekDate,courseMsgs,course2Msgs,courseItems,
+                                course2Items, ((TimetableFragment) timetableFragment).nowWeek,
+                                ((TimetableFragment) timetableFragment).semester,
+                                ((TimetableFragment) timetableFragment).originalSemester,index);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    public static void showCourseMsgOnUi(final FragmentActivity activity, final List<List<CourseBean.Course>> courseList,
+                                  final TextView month,final TextView monthWord,final TextView[] weekDate,
+                                  final Course[][] courseMsgs,final Course[][] course2Msgs,final CardView[][] courseItems
+            ,final CardView[][] course2Items,final String nowWeek,
+                                         final String semester, final String originalSemester, final int index){
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //显示课程信息
+                for(int i=0;i<5;i++){
+                    for (int j=0;j<7;j++){
+                        if (courseList!=null && courseList.get(i).get(j)!=null){
+                            CourseBean.Course course = courseList.get(i).get(j);
+                            CardView courseItem;
+                            Course courseMsg;
+                            if (course.getTime().contains("01-02-03-04")){
+                                courseItem = course2Items[0][j];
+                                courseMsg = course2Msgs[0][j];
+                            }else if(course.getTime().contains("05-06-07-08")){
+                                courseItem = course2Items[1][j];
+                                courseMsg = course2Msgs[1][j];
+                            }else {
+                                courseItem = courseItems[i][j];
+                                courseMsg = courseMsgs[i][j];
+                            }
+                            courseItem.setVisibility(View.VISIBLE);
+                            courseItem.setCardBackgroundColor(Utills.randomColor());
+                            courseMsg.getCourseName().setText(course.getCourseName());
+                            courseMsg.getCourseAddress().setText("@"+course.getAddress());
+                            if (course.getTime().contains("双周")){
+                                courseMsg.getCourseProperty().setVisibility(View.VISIBLE);
+                            }
+                            if (course.getTime().contains("单周")){
+                                courseMsg.getCourseProperty().setVisibility(View.VISIBLE);
+                                courseMsg.getCourseProperty().setText("单周");
+                            }
+
+                        }
+                    }
+                }
+                //显示顶部日期
+                if (!nowWeek.equals("-1") && semester.equals(originalSemester)){
+                    List<WeekDay> weekDays = null;
+                    try {
+                        weekDays = getWeekDays(Integer.parseInt(nowWeek), 20);
+                        WeekDay weekDay = weekDays.get(index-1);
+                        String weekMonStr = weekDay.getWeekMonStr();
+                        Log.d("weekMonStr",weekMonStr);
+                        String[] yearMonDay = weekMonStr.split("-");
+                        String yearMonStr = yearMonDay[0]+"-"+yearMonDay[1];
+                        int maxDay = Utills.getMonthday(yearMonStr);
+                        //月份
+                        String monthStr = Integer.parseInt(yearMonDay[1])+"";
+                        month.setText(monthStr);
+                        monthWord.setVisibility(View.VISIBLE);
+                        //日期
+                        int day =  Integer.parseInt(yearMonDay[2]);
+                        for(int i=0;i<weekDate.length;i++){
+                            if (day>maxDay) day=1;
+                            weekDate[i].setText(day+"");
+                            day++;
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else {
+                    month.setText("");
+                    monthWord.setVisibility(View.INVISIBLE);
+                    for(int i=0;i<weekDate.length;i++){
+                        weekDate[i].setText("");
+                    }
+                }
+            }
+        });
+
+    }
+
+    public static int getMonthday(String strDate){
+        try{
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+            Date date = format.parse(strDate);
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            int days1 = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            System.out.println("天数为=" + days1);
+            return days1;
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static void showIsNowWeek(Spinner spinner,String originalSemester,TextView isNowWeek,
+                                     String selectedWeek,String nowWeek){
+        if (((String)spinner.getSelectedItem()).equals(originalSemester) && selectedWeek.equals(nowWeek)){
+            isNowWeek.setText("本周");
+        }else {
+            isNowWeek.setText("非本周");
+        }
     }
 
     public static <T>  T parseJSON(String jsonData,Class<T> classes){

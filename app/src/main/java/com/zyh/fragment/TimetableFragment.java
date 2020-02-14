@@ -37,6 +37,7 @@ import com.zyh.fragment.timetableFragment.TimetableFragment6;
 import com.zyh.fragment.timetableFragment.TimetableFragment7;
 import com.zyh.fragment.timetableFragment.TimetableFragment8;
 import com.zyh.fragment.timetableFragment.TimetableFragment9;
+import com.zyh.utills.Utills;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,11 +45,13 @@ import java.util.List;
 
 public class TimetableFragment extends Fragment {
     public LoginBean loginBean;
-    private Spinner spinner1;
+    private Spinner spinner;
     private ArrayAdapter<String> adapter1;
     private String[] datas;
-    private String[] weeks;
     public String semester;
+    public String nowWeek;
+    public String selectedWeek;
+    public String originalSemester;
     public String week = "ssss";
     public String[] context = {"abc","def","ghi","klm"};
     public int getTimetableNum = 0;
@@ -59,6 +62,7 @@ public class TimetableFragment extends Fragment {
     public List<List<List<CourseBean.Course>>> courseLists = Arrays.asList(null,null,null,null,null,null,null,null,null
         ,null,null,null,null,null,null,null,null,null,null,null,null);
     private TextView weekText;
+    private TextView isNowWeek;
     //声明ViewPager
     private ViewPager mViewPager;
     //适配器
@@ -74,11 +78,12 @@ public class TimetableFragment extends Fragment {
         View view = inflater.inflate(R.layout.timetable, container, false);
         mViewPager = (ViewPager)view.findViewById(R.id.id_viewpager1);
         weekText = (TextView)view.findViewById(R.id.text_week);
-        initDatas();//初始化数据
+        isNowWeek = (TextView)view.findViewById(R.id.text_isnowweek);
 
-        spinner1 = (Spinner)view.findViewById(R.id.timetableSpinner1);
+
+        spinner = (Spinner)view.findViewById(R.id.timetableSpinner1);
         MainActivity mainActivity = (MainActivity)getActivity();
-        //spinner1
+        //spinner
         //需要修改！！！！！！！！！！！！
         while (true) {
             datas = mainActivity.semesters;
@@ -91,30 +96,32 @@ public class TimetableFragment extends Fragment {
             Log.d("GradeFragment","ActionBegin: datas equals null!!!");
         }
         loginBean = mainActivity.loginBean;
+        Log.d("nowWeek",loginBean.getData().getNowWeek());
         semester = loginBean.getData().getNowXueqi();
+        originalSemester = semester;
+        nowWeek = loginBean.getData().getNowWeek();
+        nowWeek="4";
+
+        initDatas();//初始化数据
+
         adapter1 = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if (spinner1==null){
+        if (spinner==null){
             Log.d("GradeFragment","ActionBegin: spinner equals null!!!");
         }
         if (adapter1==null){
             Log.d("GradeFragment","ActionBegin: adapter equals null!!!");
         }
-        spinner1.setAdapter(adapter1);
-        spinner1.setOnItemSelectedListener(new SpinnerSelectedListener1());
+        spinner.setAdapter(adapter1);
+        spinner.setOnItemSelectedListener(new SpinnerSelectedListener1());
         ////////////////////////////////////
-        for(int i=0;i<datas.length;i++){
-            if (datas[i].equals(semester)){
-                spinner1.setSelection(i,true);
-            }
-        }
-        //////////////////////////////////
-        spinner1.setVisibility(View.VISIBLE);
+        Utills.setCurrentSemester(datas,semester,spinner);
 
-        //spinner2
-        String[] weekss = {"0","1","2","3","4","5","6","7","8",
-                "9","10","11","12","13","14","15","16","17","18","19","20"};
-        weeks = weekss;
+        //////////////////////////////////
+        spinner.setVisibility(View.VISIBLE);
+
+
+
         Log.d("TimetableFragment","ActionBegin");
         return view;
     }
@@ -163,6 +170,12 @@ public class TimetableFragment extends Fragment {
         }
         //不要忘记设置ViewPager的适配器
         mViewPager.setAdapter(mAdapter);
+        //设置初始页面
+        selectedWeek = "1";
+        if (!nowWeek.equals("-1") && semester.equals(originalSemester)){
+            selectedWeek = nowWeek;
+            mViewPager.setCurrentItem(Integer.parseInt(nowWeek)-1);
+        }
         //设置ViewPager的切换监听
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -174,8 +187,11 @@ public class TimetableFragment extends Fragment {
             //页面选中事件
             @Override
             public void onPageSelected(int position) {
-                int nowWeek = position+1;
-                weekText.setText(String.valueOf(nowWeek));
+                int thisWeek = position+1;
+                selectedWeek = thisWeek+"";
+                weekText.setText(String.valueOf(thisWeek));
+                Utills.showIsNowWeek(spinner,originalSemester,isNowWeek,selectedWeek,nowWeek);
+
                 mViewPager.setCurrentItem(position);
             }
 
@@ -197,8 +213,7 @@ public class TimetableFragment extends Fragment {
             }
             weekText.setText("1");
             initDatas();
-//            mViewPager.setCurrentItem(18);
-//            mViewPager.setCurrentItem(0);
+            Utills.showIsNowWeek(spinner,originalSemester,isNowWeek,selectedWeek,nowWeek);
         }
 
         @Override

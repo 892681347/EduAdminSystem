@@ -37,6 +37,7 @@ public class GradeFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private MainActivity mainActivity;
     private String[] datas;
+    public String semester;
     private List<GradeBean.Datas> gradeList;
     private Boolean isFinished;
     @Nullable
@@ -46,34 +47,35 @@ public class GradeFragment extends Fragment {
         View view = inflater.inflate(R.layout.grade, container, false);
         isFinished = false;
         spinner = (Spinner)view.findViewById(R.id.gradeSpinner);
-        //需要修改！！！！！！！！！！！！
-        while (true) {
-            datas = mainActivity.semesters;
-            if (!(datas==null||datas.length==0)) {
-                Log.d("GradeFragment","ActionBegin: getting datas...");
-                break;
-            }
-        }
-        if (datas==null){
-            Log.d("GradeFragment","ActionBegin: datas equals null!!!");
-        }
-        loginBean = mainActivity.loginBean;
-        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if (spinner==null){
-            Log.d("GradeFragment","ActionBegin: spinner equals null!!!");
-        }
-        if (adapter==null){
-            Log.d("GradeFragment","ActionBegin: adapter equals null!!!");
-        }
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
-        ////////////////////////////////////
-        spinner.setSelection(1,true);
-        //////////////////////////////////
-        spinner.setVisibility(View.VISIBLE);
-        Log.d("GradeFragment","ActionBegin");
+        waitingAndSet();
         return view;
+    }
+    private void waitingAndSet(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    datas = mainActivity.semesters;
+                    if (!(datas==null||datas.length==0)) {
+                        Log.d("GradeFragment","ActionBegin: getting datas...");
+                        break;
+                    }
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loginBean = mainActivity.loginBean;
+                        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(adapter);
+                        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
+                        semester = loginBean.getData().getNowXueqi();
+                        Utills.setCurrentSemester(datas,semester,spinner);
+                        spinner.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
     }
     class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
 

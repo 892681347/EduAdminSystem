@@ -3,90 +3,55 @@ package com.zyh.fragment.timetableFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.zyh.beans.Course;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
+import com.zyh.utills.Utills;
 
-import java.util.List;
-
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-/**
- * Created by caobotao on 16/1/4.
- */
 public class TimetableFragment8 extends Fragment {
     private LoginBean loginBean;
-    private TextView textView;
     private Fragment timetableFragment;
+
+    private TextView month;
+    private TextView monthWord;
+    private TextView[] weekDate;
+    private Course[][] courseMsgs;
+    private Course[][] course2Msgs;
+    private CardView[][] courseItems;
+    private CardView[][] course2Items;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab1, container, false);
-        textView = (TextView)view.findViewById(R.id.text_1);
-        timetableFragment = getTimetableFragmeent();
+        int index = 8;
+        String indexStr = index+"";
+        View view = inflater.inflate(R.layout.table, container, false);
+        month = (TextView)view.findViewById(R.id.table_month);
+        monthWord = (TextView)view.findViewById(R.id.table_month_word);
+        weekDate=new TextView[7];
+        courseItems = new CardView[5][7];
+        courseMsgs = new Course[5][7];
+        course2Items = new CardView[2][7];
+        course2Msgs = new Course[2][7];
+        Utills.initCourseView(view,weekDate,courseItems,courseMsgs,course2Items,course2Msgs);
+        timetableFragment = Utills.getTimetableFragmeent(this);
         loginBean = ((TimetableFragment) timetableFragment).loginBean;
-        if(!((TimetableFragment) timetableFragment).isFinished[8]){
-            postTimetable(((TimetableFragment) timetableFragment).semester,"8");
+        if(!((TimetableFragment) timetableFragment).isFinished[index]){
+            Utills.postTimetable(loginBean,timetableFragment,((TimetableFragment) timetableFragment).semester,indexStr);
         }
-//        while(!((TimetableFragment) timetableFragment).isFinished[8]){}
-//        textView.setText(((TimetableFragment) timetableFragment).timetableList.get(8));
+        Utills.showTimetable(timetableFragment,getActivity(),
+                ((TimetableFragment) timetableFragment).courseLists.get(index),
+                month,monthWord,weekDate,courseMsgs,course2Msgs,courseItems,
+                course2Items, ((TimetableFragment) timetableFragment).nowWeek,
+                ((TimetableFragment) timetableFragment).semester,
+                ((TimetableFragment) timetableFragment).originalSemester,index);
         return view;
-    }
-    public TimetableFragment getTimetableFragmeent(){
-        Fragment timetableFragment = null;
-        List<Fragment> list=(List<Fragment>) TimetableFragment8.this.getFragmentManager().getFragments();
-        for(Fragment f:list){
-            if(f!=null && f instanceof TimetableFragment){
-                timetableFragment = f;
-                break;
-            }
-        }
-        return (TimetableFragment)timetableFragment;
-    }
-
-    private void postTimetable(final String semester, final String week) {
-        final String cookie = loginBean.getData().getCookie();
-        final String token = loginBean.getData().getToken();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("cookie",cookie)
-                            .add("xueqi",semester)
-                            .add("zc",week)
-                            .build();
-                    Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/getCourse")
-                            .post(requestBody)
-                            .addHeader("token",token)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    int nowWeek = Integer.parseInt(week);
-                    ((TimetableFragment)timetableFragment).timetableList.set(nowWeek,responseData);
-                    ((TimetableFragment)timetableFragment).getTimetableNum++;
-                    Log.d("Notfinished",String.valueOf(((TimetableFragment)timetableFragment).getTimetableNum));
-                    if (((TimetableFragment)timetableFragment).getTimetableNum==4){
-                        Log.d("finished","Get All Timetable!");
-                    }
-                    ((TimetableFragment) timetableFragment).isFinished[8] = true;
-                }catch (Exception e) {
-                    Log.d("okHttpError","okHttpError");
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 }

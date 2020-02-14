@@ -40,6 +40,7 @@ public class ExamFragment extends Fragment {
     private LoginBean loginBean;
     private Spinner spinner;
     private ArrayAdapter<String> adapter;
+    public String semester;
     private String[] datas;
     private List<ExamBean.Exam> examList;
     private MainActivity mainActivity;
@@ -52,30 +53,38 @@ public class ExamFragment extends Fragment {
         isFinished = false;
         spinner = (Spinner)view.findViewById(R.id.examSpinner);
         mainActivity = (MainActivity)getActivity();
-        //需要修改！！！！！！！！！！！！
-        while (true) {
-
-            datas = mainActivity.semesters;
-            if (!(datas==null||datas.length==0)) {
-                Log.d("ExamFragment","ActionBegin: getting datas...");
-                break;
-            }
-        }
-        datas = mainActivity.semesters;
-        loginBean = mainActivity.loginBean;
-
-        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
-        ////////////////////////////////////
-        spinner.setSelection(1,true);
-        //////////////////////////////////
-        spinner.setVisibility(View.VISIBLE);
-
-        Log.d("ExamFragment","ActionBegin");
+        waitingAndSet();
         return view;
     }
+    private void waitingAndSet(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    datas = mainActivity.semesters;
+                    if (!(datas==null||datas.length==0)) {
+                        Log.d("ExamFragment","ActionBegin: getting datas...");
+                        break;
+                    }
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        datas = mainActivity.semesters;
+                        loginBean = mainActivity.loginBean;
+                        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(adapter);
+                        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
+                        semester = loginBean.getData().getNowXueqi();
+                        Utills.setCurrentSemester(datas,semester,spinner);
+                        spinner.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
+    }
+
     class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
 
         @Override
