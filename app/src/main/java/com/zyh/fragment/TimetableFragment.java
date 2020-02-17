@@ -100,7 +100,6 @@ public class TimetableFragment extends Fragment {
         semester = loginBean.getData().getNowXueqi();
         originalSemester = semester;
         nowWeek = loginBean.getData().getNowWeek();
-        nowWeek="4";
 
         initDatas();//初始化数据
 

@@ -131,6 +131,7 @@ public class ExamFragment extends Fragment {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    /*
                     responseData = "{\"code\":200,\"msg\":\"请求成功\",\"data\":[{\"campus\":\"云塘" +
                             "校区\",\"courseName\":\"计算机组成原理\",\"teacher\":\"曾道建\",\"" +
                             "startTime\":\"2019-12-10 14:20\",\"endTime\":\"2019-12-10 16:20\",\"" +
@@ -144,6 +145,7 @@ public class ExamFragment extends Fragment {
                             "\"ticketNumber\":\"\"},{\"campus\":\"云塘校区\",\"courseName\":\"计算机图形学\"," +
                             "\"teacher\":\"桂彦\",\"startTime\":\"2019-12-26 09:20\",\"endTime\":\"2019-12-26 11:20\"," +
                             "\"address\":\"云综教B-406\",\"seatNumber\":\"\",\"ticketNumber\":\"\"}]}";
+                    */
                     ExamBean examBean = Utills.parseJSON(responseData,ExamBean.class);
                     examList = examBean.getData();
                     isFinished = true;
