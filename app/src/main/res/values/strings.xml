@@ -4,4 +4,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="at">&#064;</string>
+    <string name="apk_name">"1"</string>
 </resources>
