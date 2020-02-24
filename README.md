@@ -4,3 +4,4 @@
 ##  效果图
 
 ![](https://github.com/892681347/EduAdminPic/raw/master/TimetablePic.jpg) 
+<img src="https://github.com/892681347/EduAdminPic/raw/master/TimetablePic.jpg"  alt="课程表页面" width="375"/>
