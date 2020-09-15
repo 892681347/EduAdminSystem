@@ -12,6 +12,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
@@ -70,6 +71,11 @@ public class DownloadService extends Service {
                 startForeground(1,getNotification("Downloading...",0));
                 Toast.makeText(DownloadService.this,"Download...",Toast.LENGTH_SHORT).show();
             }
+        }
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void startForegroundForNone(int id, Notification notification){
+            startForeground(id,notification);
+            stopForeground(id);
         }
     }
 
@@ -133,7 +139,7 @@ public class DownloadService extends Service {
         Uri data = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//判断版本大于等于7.0
             // 生成文件的uri，， 注意下面参数com.ausee.fileprovider 为apk的包名加上.fileprovider
-            data = FileProvider.getUriForFile(this, "1.fileprovider", new File(filePath));
+            data = FileProvider.getUriForFile(this, Version.getApkName()+".fileprovider", new File(filePath));
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);// 给目标应用一个临时授权
         } else {
             data = Uri.fromFile(file);

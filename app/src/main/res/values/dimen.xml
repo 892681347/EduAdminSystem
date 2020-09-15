@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="grade_view_height">2dp</dimen>
+    <dimen name="grade_item_text_size">15dp</dimen>
+    <dimen name="feedback_text_size">15dp</dimen>
+    <dimen name="feedback_padding">15dp</dimen>
+    <dimen name="about_padding_top">15dp</dimen>
+</resources>

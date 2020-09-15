@@ -1,6 +1,7 @@
 package com.zyh.activities;
 
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.zyh.beans.Account;
 import com.zyh.beans.LoginBean;
+import com.zyh.beans.Version;
 import com.zyh.fragment.R;
 import com.zyh.utills.Utills;
 
@@ -46,6 +48,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //取消welcomActivity活动的多余通知
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(10);
         sendRequest = (Button) findViewById(R.id.send_request);
         usernameEdit = (EditText)findViewById(R.id.username);
         passwordEdit = (EditText)findViewById(R.id.password);
@@ -120,6 +125,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",username)
                             .add("password",password)
+                            .add("agent", Version.getVersion())
                             .build();
                     Request request = new Request.Builder()
                             .url("http://47.106.159.165:8081/login")
@@ -139,7 +145,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }).start();
     }
     private void loginHandle(LoginBean loginBean, String username, String password){
-        String code = loginBean.getCode();
+        String code;
+        code = loginBean.getCode();
         waitEnd();
         if(code.equals("200")){
             if (ifSaveAccount.isChecked()){

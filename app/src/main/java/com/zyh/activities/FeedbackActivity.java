@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zyh.beans.LoginBean;
@@ -21,30 +22,65 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.zyh.utills.Utills.validatePhoneNumber;
+
 public class FeedbackActivity extends AppCompatActivity {
     EditText name;
     EditText phone;
     EditText content;
     Button submit;
+    ImageView returnBack;
     private String token;
+    private String lastName;
+    private String lastPhone;
+    private String lastContent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_feedback);
 
         Intent intent = getIntent();
+        lastName="";
+        lastPhone="";
+        lastContent="";
         token = (String) intent.getStringExtra("token");
         name = (EditText)findViewById(R.id.feedback_name);
         phone = (EditText)findViewById(R.id.feedback_phone);
         content = (EditText)findViewById(R.id.feedback_content);
         submit = (Button)findViewById(R.id.feedback_submit);
+        returnBack = findViewById(R.id.return_img);
+        name.setHintTextColor(getResources().getColor(R.color.feedback_text_color));
+        phone.setHintTextColor(getResources().getColor(R.color.feedback_text_color));
+        content.setHintTextColor(getResources().getColor(R.color.feedback_text_color));
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String nameString = name.getText().toString();
                 String phoneString = phone.getText().toString();
                 String contentString = content.getText().toString();
-                postFeedback(token,nameString,phoneString,contentString);
+                int contentLength = contentString.length();
+                if (nameString.equals("")){
+                    Toast.makeText(FeedbackActivity.this, "姓名不可为空", Toast.LENGTH_SHORT).show();
+                }else if (!validatePhoneNumber(phoneString)){
+                    Toast.makeText(FeedbackActivity.this, "请填入正确手机号", Toast.LENGTH_SHORT).show();
+                } else if (contentLength<4 || contentLength>105){
+                    Toast.makeText(FeedbackActivity.this, "请输入4-100字", Toast.LENGTH_SHORT).show();
+                }else if (lastContent.equals(contentString) && lastPhone.equals(phoneString) && lastName.equals(nameString)){
+                    Toast.makeText(FeedbackActivity.this, "请勿重复提交", Toast.LENGTH_SHORT).show();
+                }else {
+                    lastName = nameString;
+                    lastPhone = phoneString;
+                    lastContent = contentString;
+                    postFeedback(token,nameString,phoneString,contentString);
+                }
+
+            }
+        });
+        returnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

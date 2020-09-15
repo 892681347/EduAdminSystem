@@ -34,6 +34,8 @@ import okhttp3.Response;
 public class GradeFragment extends Fragment {
     private LoginBean loginBean;
     private Spinner spinner;
+    private LinearLayout grade_point_block;
+    private TextView grade_point;
     private ArrayAdapter<String> adapter;
     private MainActivity mainActivity;
     private String[] datas;
@@ -47,6 +49,8 @@ public class GradeFragment extends Fragment {
         View view = inflater.inflate(R.layout.grade, container, false);
         isFinished = false;
         spinner = (Spinner)view.findViewById(R.id.gradeSpinner);
+        grade_point_block = view.findViewById(R.id.grade_point_block);
+        grade_point = view.findViewById(R.id.grade_point);
         waitingAndSet();
         return view;
     }
@@ -90,12 +94,15 @@ public class GradeFragment extends Fragment {
             TextView noGrade = (TextView) getActivity().findViewById(R.id.no_grade);
             if (gradeList==null){
                 recyclerView.setVisibility(View.INVISIBLE);
+                grade_point_block.setVisibility(View.INVISIBLE);
                 noGrade.setVisibility(View.VISIBLE);
                 isFinished = false;
             }else {
                 recyclerView.setVisibility(View.VISIBLE);
+                grade_point_block.setVisibility(View.VISIBLE);
                 noGrade.setVisibility(View.INVISIBLE);
                 showGradeRecyclerView();
+                showGradePoint(gradeList);
             }
 
         }
@@ -142,5 +149,13 @@ public class GradeFragment extends Fragment {
         GradeAdapter adapter = new GradeAdapter(gradeList);
         recyclerView.setAdapter(adapter);
         isFinished = false;
+    }
+    private void showGradePoint(List<GradeBean.Datas> gradeList){
+        double pointSum=0;
+        for (GradeBean.Datas grade : gradeList) {
+            pointSum += Double.parseDouble(grade.getPoint());
+        }
+        double point = (double)Math.round((pointSum/(gradeList.size()))*100)/100;
+        grade_point.setText(String.valueOf(point));
     }
 }

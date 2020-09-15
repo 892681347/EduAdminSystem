@@ -1,5 +1,6 @@
 package com.zyh.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,6 +53,7 @@ public class TimetableFragment extends Fragment {
     public String nowWeek;
     public String selectedWeek;
     public String originalSemester;
+    public Activity thisMainActivity;
     public String week = "ssss";
     public String[] context = {"abc","def","ghi","klm"};
     public int getTimetableNum = 0;
@@ -83,6 +85,7 @@ public class TimetableFragment extends Fragment {
 
         spinner = (Spinner)view.findViewById(R.id.timetableSpinner1);
         MainActivity mainActivity = (MainActivity)getActivity();
+        thisMainActivity = mainActivity;
         //spinner
         //需要修改！！！！！！！！！！！！
         while (true) {

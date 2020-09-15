@@ -2,18 +2,22 @@ package com.zyh.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -50,6 +54,7 @@ public class welcomeActivity extends Activity {
     private String downloadURL;
     private final int NOTICE = 1;
     private int status = 0;
+    private int serviceStatus = 0;
 
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -70,17 +75,20 @@ public class welcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         postVersion();
-
-        Intent intent = new Intent(this,DownloadService.class);
-        if (Build.VERSION.SDK_INT >= 26) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
-        bindService(intent,connection,BIND_AUTO_CREATE);
+        serviceInit();
         if(ContextCompat.checkSelfPermission(welcomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(welcomeActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
+    }
+    private void serviceInit(){
+        Intent serviceIntent = new Intent(welcomeActivity.this,DownloadService.class);
+        if (Build.VERSION.SDK_INT >= 26) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        bindService(serviceIntent,connection,BIND_AUTO_CREATE);
+        Log.d("downloadBinder","init");
     }
     private void startNextActivity(){
         TimerTask delayTask = new TimerTask() {
@@ -89,8 +97,15 @@ public class welcomeActivity extends Activity {
                 List<Account> lastAccount = LitePal.where("isLast = ?","1").find(Account.class);
                 if (!lastAccount.isEmpty()){
                     String account = lastAccount.get(0).getUsername();
+
                     String pw = lastAccount.get(0).getPassword();
                     if (pw!=null && pw!=""){
+                        int version = android.os.Build.VERSION.SDK_INT;
+//                        if (version < 29) {
+//                            startMainActivity(account,pw);
+//                        }else {
+//                            startLoginActivity();
+//                        }
                         startMainActivity(account,pw);
                     }else {
                         startLoginActivity();
@@ -101,7 +116,7 @@ public class welcomeActivity extends Activity {
             }
         };
         timer = new Timer();
-        timer.schedule(delayTask,2000);
+        timer.schedule(delayTask,1500);
     }
     private void startLoginActivity(){
         Intent intent = new Intent(welcomeActivity.this,LoginActivity.class);
@@ -157,6 +172,20 @@ public class welcomeActivity extends Activity {
             }
         });
     }
+    private void showNoticeForNone(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            //数字是随便写的“40”，
+            nm.createNotificationChannel(new NotificationChannel("40", "App Service", NotificationManager.IMPORTANCE_DEFAULT));
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(welcomeActivity.this, "40");
+            builder.setSmallIcon(R.drawable.ic_launcher_background);
+            builder.setContentTitle("通了个知");
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            builder.setContentText("别管这条通知，看了也白看");
+            //其中的2，是也随便写的，正式项目也是随便写
+            downloadBinder.startForegroundForNone(10 ,builder.build());
+        }
+    }
     private void showUpdateDialog(final String url) {
         downloadURL = url;
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("有新版本可用")
@@ -169,6 +198,7 @@ public class welcomeActivity extends Activity {
                 }).setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        showNoticeForNone();
                         startNextActivity();
                         dialogInterface.dismiss();
                     }
@@ -184,9 +214,9 @@ public class welcomeActivity extends Activity {
     }
     private void showFirstUseDialog(){
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("新版本介绍")
-                .setMessage("\t\t下一版本将实现课程表桌面小部件，敬请期待\n\n当前版本新特性:\n\n" +
-                        "\t\t1.实现欢迎页面\n\n\t\t2.新版本提示\n\n\t\t3.UI界面美化\n\n作为软件的开发者，" +
-                        "我的目标是在长理范围内取代WakeUp，如果有任何建议欢迎反馈给我们，谢谢支持！")
+                .setMessage("当前版本新特性:\n\n" +
+                        "\t\t1.课表点击查看详情\n\n\t\t2.UI界面优化\n\n\t\t3.查询绩点" +
+                        "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -196,9 +226,8 @@ public class welcomeActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplication(),"this is new Version",Toast.LENGTH_SHORT).show();
                 AlertDialog alertDialog = builder.create();
-                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.setCancelable(false);
                 alertDialog.show();
             }
         });
@@ -218,6 +247,7 @@ public class welcomeActivity extends Activity {
                     SharedPreferences sharedPreferences = getSharedPreferences("FirstRun",MODE_PRIVATE);
                     boolean first_run = sharedPreferences.getBoolean("isFirstRun",true);
                     if (versionBean.getData().getVersionName().equals(Version.getVersion())){
+                        showNoticeForNone();
                         if (first_run){
                             sharedPreferences.edit().putBoolean("isFirstRun",false).apply();
                             showFirstUseDialog();
@@ -250,6 +280,7 @@ public class welcomeActivity extends Activity {
     protected void onDestroy(){
         super.onDestroy();
         unbindService(connection);
+
     }
     private void startDownloadAPK(final String url){
         runOnUiThread(new Runnable() {
@@ -329,6 +360,7 @@ public class welcomeActivity extends Activity {
             if (!checkNotifySetting()){
                 Toast.makeText(welcomeActivity.this,"未打开通知权限无法更新",Toast.LENGTH_SHORT).show();
             }
+            Log.d("NOTICE","startDownload");
             downloadBinder.startDownload(downloadURL);
             status = 0;
         }

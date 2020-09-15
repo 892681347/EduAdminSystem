@@ -41,6 +41,9 @@ public class DownloadTask extends AsyncTask<String,Integer,Integer> {
                 return TYPE_FALIED;
             }else if (contentLength == downloadedLength){
                 return TYPE_SUCCESS;
+            }else {
+                downloadedLength = 0;
+                file.delete();
             }
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()

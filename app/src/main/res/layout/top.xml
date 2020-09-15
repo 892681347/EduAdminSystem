@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:background="#00796b"
-              android:gravity="center"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorMain"
               android:layout_width="match_parent"
               android:layout_height="45dp">
 
@@ -11,8 +10,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="课程表"
+        android:layout_centerInParent="true"
         android:textColor="#ffffff"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/addFeedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:visibility="invisible">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="意见反馈"
+            android:textColor="#fff"
+            android:textSize="13sp"/>
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/feedback"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

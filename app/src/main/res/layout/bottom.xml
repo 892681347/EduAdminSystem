@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="55dp"
               android:gravity="center"
-              android:background="#00796b"
+              android:background="@color/colorBottom"
               android:orientation="horizontal">
 
     <LinearLayout
@@ -22,9 +22,10 @@
             android:src="@mipmap/timetable_pressed"
             android:background="#00000000"/>
         <TextView
+            android:id="@+id/id_tab_weixin_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            android:textColor="#808080"
             android:text="课程表"/>
     </LinearLayout>
     <LinearLayout
@@ -43,9 +44,9 @@
             android:src="@mipmap/grade"
             android:background="#00000000"/>
         <TextView
+            android:id="@+id/id_tab_frd_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:text="成绩"/>
     </LinearLayout>
     <LinearLayout
@@ -64,9 +65,9 @@
             android:src="@mipmap/exam"
             android:background="#00000000"/>
         <TextView
+            android:id="@+id/id_tab_address_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:text="考试"/>
     </LinearLayout>
     <LinearLayout
@@ -85,9 +86,9 @@
             android:src="@mipmap/individual"
             android:background="#00000000"/>
         <TextView
+            android:id="@+id/id_tab_setting_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:text="我的"/>
     </LinearLayout>
 

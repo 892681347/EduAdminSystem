@@ -1,14 +1,22 @@
 package com.zyh.utills;
 
+import android.app.Activity;
 import android.app.Person;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zyh.beans.Course;
@@ -25,6 +33,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -33,9 +42,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.zyh.utills.WeekUtil.getWeekDays;
+import static org.litepal.LitePalApplication.getContext;
 
 public class Utills {
     private static int[] colors = {0x64ff00ff,0xb44d3900,0xb4f400a1,0xb4daa520,0xb44169e1,0xb4b509ff};
+    private static AlertDialog dialog = null;
 
     public static int randomColor(){
         return colors[new Random().nextInt(colors.length)];
@@ -61,10 +72,10 @@ public class Utills {
         return (TimetableFragment)timetableFragment;
     }
 
-    public static void showTimetable(final Fragment timetableFragment,final FragmentActivity activity, final List<List<CourseBean.Course>> courseList,
-                                     final TextView month,final TextView monthWord,final TextView[] weekDate,
-                                     final Course[][] courseMsgs,final Course[][] course2Msgs,final CardView[][] courseItems
-            ,final CardView[][] course2Items,final String nowWeek,
+    public static void showTimetable(final Fragment timetableFragment, final Activity activity, final List<List<CourseBean.Course>> courseList,
+                                     final TextView month, final TextView monthWord, final TextView[] weekDate,
+                                     final Course[][] courseMsgs, final Course[][] course2Msgs, final CardView[][] courseItems
+            , final CardView[][] course2Items, final String nowWeek,
                                      final String semester, final String originalSemester, final int index){
         new Thread(new Runnable() {
             @Override
@@ -79,13 +90,137 @@ public class Utills {
                                 course2Items, ((TimetableFragment) timetableFragment).nowWeek,
                                 ((TimetableFragment) timetableFragment).semester,
                                 ((TimetableFragment) timetableFragment).originalSemester,index);
+                        Utills.initCourseControl(activity,((TimetableFragment) timetableFragment).courseLists.get(index),courseItems,course2Items);
                     }
                 });
             }
         }).start();
     }
 
-    public static void showCourseMsgOnUi(final FragmentActivity activity, final List<List<CourseBean.Course>> courseList,
+    public static void initCourseControl(final Activity activity,final List<List<CourseBean.Course>> courseList,
+                                         final CardView[][] courseItems,final CardView[][] course2Items){
+        if(courseList==null) return;
+        for(int i=0;i<5;i++){
+            for (int j=0;j<7;j++){
+                CourseBean.Course course = courseList.get(i).get(j);
+
+                courseItems[i][j].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String name =course.getCourseName();
+                        String address = course.getAddress();
+                        String teacher = course.getTeacher();
+                        String time = course.getTime();
+                        StringTokenizer st = new StringTokenizer(time, "[]");
+                        String time_week="";
+                        String time_clock="";
+                        int i=0;
+                        while(st.hasMoreElements()){
+                            if (i==0){
+                                time_week = st.nextToken();
+                            }else if (i==1){
+                                time_clock = st.nextToken();
+                            }
+                            i++;
+                        }
+                            //Toast.makeText(getContext(),name+","+address+","+teacher,Toast.LENGTH_SHORT).show();
+                        showDialog(activity,name,time_week,time_clock,teacher,address);
+                        //showDialog(activity,name,teacher,time,address);
+                    }
+                });
+            }
+        }
+        for (int i=0;i<2;i++){
+            for (int j = 0;j<7;j++){
+                int h = 0;
+                if (i==1) h = 2;
+                CourseBean.Course course = courseList.get(h).get(j);
+
+                course2Items[i][j].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String name =course.getCourseName();
+                        String address = course.getAddress();
+                        String teacher = course.getTeacher();
+                        String time = course.getTime();
+                        StringTokenizer st = new StringTokenizer(time, "[]");
+                        String time_week="";
+                        String time_clock="";
+                        int i=0;
+                        while(st.hasMoreElements()){
+                            if (i==0){
+                                time_week = st.nextToken();
+                            }else if (i==1){
+                                time_clock = st.nextToken();
+                            }
+                            i++;
+                        }
+                        //Toast.makeText(getContext(),name+","+address+","+teacher,Toast.LENGTH_SHORT).show();
+                        showDialog(activity,name,time_week,time_clock,teacher,address);
+                        //showDialog(activity,name,teacher,time,address);
+                    }
+                });
+            }
+        }
+    }
+
+    public static void showDialog(final Activity activity,final String name,final String week,final String time,final String teacher,final String locate) {
+
+        // 构建dialog显示的view布局
+        View view_dialog = activity.getLayoutInflater().from(activity).inflate(R.layout.view_dialog, null);
+        ((TextView)view_dialog.findViewById(R.id.name)).setText(name);
+        ((TextView)view_dialog.findViewById(R.id.week)).setText(week);
+        ((TextView)view_dialog.findViewById(R.id.time)).setText(time);
+        ((TextView)view_dialog.findViewById(R.id.teacher)).setText(teacher);
+        ((TextView)view_dialog.findViewById(R.id.locate)).setText(locate);
+
+        if (dialog == null){
+            // 创建AlertDialog对象
+            dialog = new AlertDialog.Builder(activity)
+                    .create();
+            dialog.show();
+            // 设置点击可取消
+            dialog.setCancelable(true);
+
+            // 获取Window对象
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            //设置宽度
+            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+            lp.width = 850;// 调整该值可以设置对话框显示的宽度
+            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(lp);
+            // 设置显示视图内容
+            window.setContentView(view_dialog);
+        }else {
+            try {
+                dialog.show();
+                Window window = dialog.getWindow();
+                window.setContentView(view_dialog);
+            }catch (Exception e){
+                e.printStackTrace();
+                dialog = new AlertDialog.Builder(activity)
+                        .create();
+                dialog.show();
+                // 设置点击可取消
+                dialog.setCancelable(true);
+
+                // 获取Window对象
+                Window window = dialog.getWindow();
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+                //设置宽度
+                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                lp.width = 850;// 调整该值可以设置对话框显示的宽度
+                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                window.setAttributes(lp);
+                // 设置显示视图内容
+                window.setContentView(view_dialog);
+            }
+
+        }
+    }
+
+    public static void showCourseMsgOnUi(final Activity activity, final List<List<CourseBean.Course>> courseList,
                                   final TextView month,final TextView monthWord,final TextView[] weekDate,
                                   final Course[][] courseMsgs,final Course[][] course2Msgs,final CardView[][] courseItems
             ,final CardView[][] course2Items,final String nowWeek,
@@ -100,7 +235,7 @@ public class Utills {
                             CourseBean.Course course = courseList.get(i).get(j);
                             CardView courseItem;
                             Course courseMsg;
-                            if (course.getTime().contains("01-02-03-04")){
+                            if (course.getTime().contains("01-02-03-04")){    //跨两大节的课
                                 courseItem = course2Items[0][j];
                                 courseMsg = course2Msgs[0][j];
                             }else if(course.getTime().contains("05-06-07-08")){
@@ -378,6 +513,7 @@ public class Utills {
                 (TextView)view.findViewById(R.id.course_7_34_place),(TextView)view.findViewById(R.id.course_7_34_property));
     }
 
+
     public static void show(final FragmentActivity activity, final Fragment timetableFragment, final TextView textView, final int index){
         new Thread(new Runnable() {
             @Override
@@ -423,5 +559,13 @@ public class Utills {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 验证手机号码是否合法
+     */
+    public static boolean validatePhoneNumber(String mobiles) {
+        String telRegex = "^((13[0-9])|(15[^4])|(18[0-9])|(17[0-8])|(147,145))\\d{8}$";
+        return !TextUtils.isEmpty(mobiles) && mobiles.matches(telRegex);
     }
 }

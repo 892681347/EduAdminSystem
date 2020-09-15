@@ -56,14 +56,14 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> 
         GradeBean.Datas grade = mGrade.get(position);
         String courseName = grade.getCourseName();
         int size = courseName.length();
-        if (size>=12){
-            courseNameText.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
-            LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) courseNameText.getLayoutParams();
-            linearParams.weight *= 0.6;
-            courseNameText.setLayoutParams(linearParams);
-        }else if(size>=9){
-            courseNameText.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
-        }
+//        if (size>=12){
+//            courseNameText.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+//            LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) courseNameText.getLayoutParams();
+//            linearParams.weight *= 0.6;
+//            courseNameText.setLayoutParams(linearParams);
+//        }else if(size>=9){
+//            courseNameText.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+//        }
         courseNameText.setText(courseName);
         holder.scoreText.setText(grade.getScore());
         holder.xuefenText.setText(grade.getXuefen());

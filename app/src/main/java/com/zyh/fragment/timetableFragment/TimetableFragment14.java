@@ -46,7 +46,7 @@ public class TimetableFragment14 extends Fragment {
         if(!((TimetableFragment) timetableFragment).isFinished[index]){
             Utills.postTimetable(loginBean,timetableFragment,((TimetableFragment) timetableFragment).semester,indexStr);
         }
-        Utills.showTimetable(timetableFragment,getActivity(),
+        Utills.showTimetable(timetableFragment,((TimetableFragment) timetableFragment).thisMainActivity,
                 ((TimetableFragment) timetableFragment).courseLists.get(index),
                 month,monthWord,weekDate,courseMsgs,course2Msgs,courseItems,
                 course2Items, ((TimetableFragment) timetableFragment).nowWeek,

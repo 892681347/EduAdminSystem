@@ -1,8 +1,11 @@
 package com.zyh.activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,11 +53,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     private ImageButton mImgExam;
     private ImageButton mImgIndividual;
 
+    //声明四个Tab的TextView
+    private TextView mTextTimetable;
+    private TextView mTextGrade;
+    private TextView mTextExam;
+    private TextView mTextIndividual;
+
     //声明四个Tab分别对应的Fragment
     private Fragment mFragTimetable;
     private Fragment mFragGrade;
     private Fragment mFragExam;
     private Fragment mFragIndividual;
+
+    private LinearLayout addFeedback;
 
     public LoginBean loginBean;
     public String[] semesters;
@@ -61,7 +74,17 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
+//            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        }
         setContentView(R.layout.activity_main);
+        //取消welcomActivity活动的多余通知
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(10);
+
         Intent intent = getIntent();
         loginBean = (LoginBean) intent.getSerializableExtra("loginBean");
         Log.d("MainActivity","ActionBegin:Already get loginBean");
@@ -69,6 +92,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         initViews();//初始化控件
         initEvents();//初始化事件
         selectTab(0);//默认选中第一个Tab
+        addFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackActivity.actionStart(MainActivity.this,loginBean.getData().getToken());
+            }
+        });
     }
 
     public static void actionStart(Context context, LoginBean loginBean){
@@ -93,20 +122,27 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         mTabExam = (LinearLayout) findViewById(R.id.id_tab_address);
         mTabIndividual = (LinearLayout) findViewById(R.id.id_tab_setting);
 
-        //初始化四个ImageButton
+        //初始化四个Tab的ImageButton
         mImgTimetable = (ImageButton) findViewById(R.id.id_tab_weixin_img);
         mImgGrade = (ImageButton) findViewById(R.id.id_tab_frd_img);
         mImgExam = (ImageButton) findViewById(R.id.id_tab_address_img);
         mImgIndividual = (ImageButton) findViewById(R.id.id_tab_setting_img);
 
+        //初始化四个Tab的TextView
+        mTextTimetable = findViewById(R.id.id_tab_weixin_text);
+        mTextGrade = findViewById(R.id.id_tab_frd_text);
+        mTextExam = findViewById(R.id.id_tab_address_text);
+        mTextIndividual = findViewById(R.id.id_tab_setting_text);
+
         topNmae = (TextView)findViewById(R.id.top_name);
+        addFeedback = (LinearLayout)findViewById(R.id.addFeedback) ;
     }
 
     //处理Tab的点击事件
     @Override
     public void onClick(View v) {
         //先将四个ImageButton置为灰色
-        resetImgs();
+        resetImgsText();
         switch (v.getId()) {
             case R.id.id_tab_weixin:
                 selectTab(0);//当点击的是微信的Tab就选中微信的Tab
@@ -135,7 +171,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
             case 0:
                 //设置微信的ImageButton为绿色
                 mImgTimetable.setImageResource(R.mipmap.timetable_pressed);
+                mTextTimetable.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("课程表");
+                addFeedback.setVisibility(View.INVISIBLE);
                 //如果微信对应的Fragment没有实例化，则进行实例化，并显示出来
                 if (mFragTimetable == null) {
                     mFragTimetable = new TimetableFragment();
@@ -147,7 +185,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 break;
             case 1:
                 mImgGrade.setImageResource(R.mipmap.grade_pressed);
+                mTextGrade.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("成绩");
+                addFeedback.setVisibility(View.INVISIBLE);
                 if (mFragGrade == null) {
                     mFragGrade = new GradeFragment();
                     transaction.add(R.id.id_content, mFragGrade);
@@ -157,7 +197,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 break;
             case 2:
                 mImgExam.setImageResource(R.mipmap.exam_pressed);
+                mTextExam.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("考试");
+                addFeedback.setVisibility(View.INVISIBLE);
                 if (mFragExam == null) {
                     mFragExam = new ExamFragment();
                     transaction.add(R.id.id_content, mFragExam);
@@ -167,7 +209,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 break;
             case 3:
                 mImgIndividual.setImageResource(R.mipmap.individual_pressed);
+                mTextIndividual.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("我的");
+                addFeedback.setVisibility(View.VISIBLE);
                 if (mFragIndividual == null) {
                     mFragIndividual = new IndividualFragment();
                     transaction.add(R.id.id_content, mFragIndividual);
@@ -196,11 +240,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     }
 
     //将四个ImageButton置为灰色
-    private void resetImgs() {
+    private void resetImgsText() {
         mImgTimetable.setImageResource(R.mipmap.timetable);
         mImgGrade.setImageResource(R.mipmap.grade);
         mImgExam.setImageResource(R.mipmap.exam);
         mImgIndividual.setImageResource(R.mipmap.individual);
+
+        mTextTimetable.setTextColor(Color.parseColor("#808080"));
+        mTextGrade.setTextColor(Color.parseColor("#808080"));
+        mTextExam.setTextColor(Color.parseColor("#808080"));
+        mTextIndividual.setTextColor(Color.parseColor("#808080"));
     }
 
     private void postSemester(final String token){

@@ -2,65 +2,132 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="40dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="姓名"
-        android:textSize="18sp"/>
-    <EditText
-        android:id="@+id/feedback_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10sp"
-        android:layout_marginTop="5dp"/>
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="手机号"
-        android:textSize="18sp" />
-    <EditText
-        android:id="@+id/feedback_phone"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10sp"
-        android:layout_marginTop="5dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="内容"
-        android:textSize="18sp"/>
+        android:background="@drawable/border_bottom">
+        <ImageView
+            android:id="@+id/return_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/return_img"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="反馈建议"
+            android:layout_margin="20dp"
+            android:layout_centerInParent="true"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/border">
-        <EditText
-            android:id="@+id/feedback_content"
+        android:layout_height="match_parent"
+        android:background="#F0EFF4"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="#FFF"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/feedback_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textCursorDrawable="@null"
+                android:padding="10sp"
+                android:layout_marginLeft="10dp"
+                android:textColorHint="#000"
+                android:textSize="@dimen/feedback_text_size"
+                android:hint="说说你的问题（4-100字）"
+                android:textColor="@color/feedback_text_color"/>
+
+            <Button
+                android:id="@+id/feedback_submit"
+                android:layout_width="71dp"
+                android:layout_height="36dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_radius"
+                android:text="提交"
+                android:textColor="#FFF"
+                android:textSize="@dimen/feedback_text_size" />
+        </RelativeLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="10sp"
-            android:textColorHint="#000"
-            android:hint="你有什么想要对我们说的吗，大胆说出来吧......"
-            android:textColor="#000"
-            android:layout_gravity="center"/>
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:background="#FFF">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/feedback_padding"
+                android:background="@drawable/border_bottom">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/feedback_text_size"
+                    android:textColor="@color/feedback_text_color"
+                    android:text="姓名"/>
+                <EditText
+                    android:id="@+id/feedback_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:textCursorDrawable="@null"
+                    android:paddingLeft="30dp"
+                    android:hint="请填写"
+                    android:textSize="@dimen/feedback_text_size"
+                    android:lines="1"
+                    android:textColor="@color/feedback_text_color"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/feedback_padding"
+                android:background="@drawable/border_bottom">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机"
+                    android:textSize="@dimen/feedback_text_size"
+                    android:textColor="@color/feedback_text_color"/>
+                <EditText
+                    android:id="@+id/feedback_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:textSize="@dimen/feedback_text_size"
+                    android:hint="请填写"
+                    android:background="@null"
+                    android:textCursorDrawable="@null"
+                    android:lines="1"
+                    android:textColor="@color/feedback_text_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/feedback_submit"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30sp"
-        android:background="#808080"
-        android:textColor="#d2d2d2"
-        android:textSize="20sp"
-        android:text="提交反馈"/>
+
 
 </LinearLayout>

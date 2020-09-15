@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zyh.fragment">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -15,12 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.zyh.activities.About"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
         <service
             android:name="com.zyh.update.DownloadService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity android:name="com.zyh.activities.welcomeActivity">
+        <activity
+            android:name="com.zyh.activities.welcomeActivity"
+            android:icon="@mipmap/ic_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,9 +39,10 @@
         <activity
             android:name="com.zyh.activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="1.fileprovider"
+            android:authorities="长理教务v2.2.0.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
