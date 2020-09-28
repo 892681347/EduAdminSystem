@@ -16,4 +16,8 @@
                                                                 <!-- ① * 2 = ② + ③ -->
     <!-- table.xml页面中跨4节课每个课程CardView的layout_height -->
     <dimen name="course_item_layout_height2">222dp</dimen><!-- ③ -->
+
+
+    <dimen name="grade_item_text_title_size">15sp</dimen>
+    <dimen name="grade_item_text_content_size">14sp</dimen>
 </resources>

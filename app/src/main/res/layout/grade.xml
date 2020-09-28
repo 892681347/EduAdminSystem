@@ -43,7 +43,17 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grade_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:text="Tip:点击右侧成绩获取平时成绩"
+            android:visibility="gone"/>
     </LinearLayout>
     <TextView
         android:id="@+id/no_grade"

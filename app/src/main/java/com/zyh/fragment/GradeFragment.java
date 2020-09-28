@@ -92,15 +92,18 @@ public class GradeFragment extends Fragment {
             }
             RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.grade_recycler_view);
             TextView noGrade = (TextView) getActivity().findViewById(R.id.no_grade);
+            TextView tip = getActivity().findViewById(R.id.tip);
             if (gradeList==null){
                 recyclerView.setVisibility(View.INVISIBLE);
                 grade_point_block.setVisibility(View.INVISIBLE);
                 noGrade.setVisibility(View.VISIBLE);
+                tip.setVisibility(View.GONE);
                 isFinished = false;
             }else {
                 recyclerView.setVisibility(View.VISIBLE);
                 grade_point_block.setVisibility(View.VISIBLE);
                 noGrade.setVisibility(View.INVISIBLE);
+                tip.setVisibility(View.VISIBLE);
                 showGradeRecyclerView();
                 showGradePoint(gradeList);
             }
@@ -143,19 +146,23 @@ public class GradeFragment extends Fragment {
         }).start();
     }
     private void showGradeRecyclerView(){
+        final String cookie = loginBean.getData().getCookie();
+        final String token = loginBean.getData().getToken();
         RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.grade_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mainActivity);
         recyclerView.setLayoutManager(layoutManager);
-        GradeAdapter adapter = new GradeAdapter(gradeList);
+        GradeAdapter adapter = new GradeAdapter(gradeList,getActivity(),token,cookie);
         recyclerView.setAdapter(adapter);
         isFinished = false;
     }
     private void showGradePoint(List<GradeBean.Datas> gradeList){
-        double pointSum=0;
+        double pointCreditSum = 0;
+        double creditSum = 0;
         for (GradeBean.Datas grade : gradeList) {
-            pointSum += Double.parseDouble(grade.getPoint());
+            creditSum += Double.parseDouble(grade.getXuefen());
+            pointCreditSum += Double.parseDouble(grade.getPoint())*Double.parseDouble(grade.getXuefen());
         }
-        double point = (double)Math.round((pointSum/(gradeList.size()))*100)/100;
-        grade_point.setText(String.valueOf(point));
+        double AVGPoint = (double)Math.round(pointCreditSum/creditSum*100)/100;
+        grade_point.setText(String.valueOf(AVGPoint));
     }
 }

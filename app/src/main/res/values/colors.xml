@@ -7,4 +7,6 @@
     <color name="colorBottom">#FFFFFF</color>
     <color name="grade_item_text">#000</color>
     <color name="feedback_text_color">#949494</color>
+    <color name="grade_item_text_color">#383838</color>
+    <color name="colorPop">#40cab3</color>
 </resources>

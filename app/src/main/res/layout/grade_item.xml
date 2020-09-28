@@ -2,114 +2,155 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/shape_corner3"
-    android:layout_margin="10dp">
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border_bottom_grade_item_title">
+        <LinearLayout
+            android:id="@+id/triangle_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/triangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/triangle_right"/>
+            <TextView
+                android:id="@+id/course_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_title_size"
+                android:text="毛泽东思想和中国特色社会主义理论体系课外实践"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/score_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="20dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="@dimen/grade_item_text_title_size"
+            android:text="85"
+            android:textColor="#66CC22" />
+    </RelativeLayout>
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="5dp"
-        android:background="@drawable/shape_corner4">
-        <!--#008877-->
+        android:background="@drawable/border_bottom_grade_item_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:visibility="gone">
+        <!--        android:visibility="gone"-->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginRight="80dp">
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="课程名称： " />
             <TextView
                 android:id="@+id/course_name"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/grade_item_text_size"
-                android:textColor="@color/grade_item_text"/>
-            <!--9  18sp；12 150dp 16sp-->
-            <TextView
-                android:id="@+id/score"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/grade_item_text_size"
-                android:gravity="right|center_vertical"
-                android:textColor="@color/grade_item_text"/>
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="毛泽东思想和中国特色社会主义理论体系课外实践" />
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/grade_view_height"
-            android:background="@color/grade_item_text" />
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginRight="80dp">
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="学分"
-                android:textSize="@dimen/grade_item_text_size"
-                android:textColor="@color/grade_item_text"/>
-            <TextView
-                android:id="@+id/xuefen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/grade_item_text_size"
-                android:gravity="right"
-                android:textColor="@color/grade_item_text"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/grade_view_height"
-            android:background="@color/grade_item_text" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginRight="80dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="绩点"
-                android:textSize="@dimen/grade_item_text_size"
-                android:textColor="@color/grade_item_text"/>
-            <TextView
-                android:id="@+id/point"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/grade_item_text_size"
-                android:gravity="right"
-                android:textColor="@color/grade_item_text"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/grade_view_height"
-            android:background="@color/grade_item_text" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginRight="80dp">
-            <TextView
-                android:id="@+id/method"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/grade_item_text_size"
-                android:textColor="@color/grade_item_text"/>
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="课程性质： " />
             <TextView
                 android:id="@+id/nature"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/grade_item_text_size"
-                android:gravity="right"
-                android:textColor="@color/grade_item_text"/>
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="专业课" />
         </LinearLayout>
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="3dp"-->
-            <!--android:background="@color/grade_item_text" />-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="学分： " />
+            <TextView
+                android:id="@+id/xuefen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="绩点： " />
+            <TextView
+                android:id="@+id/point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="3.3" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="成绩： " />
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grade_item_text_color"
+                android:textSize="@dimen/grade_item_text_content_size"
+                android:text="83" />
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

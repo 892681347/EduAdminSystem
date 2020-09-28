@@ -5,4 +5,6 @@
     <dimen name="feedback_text_size">15dp</dimen>
     <dimen name="feedback_padding">15dp</dimen>
     <dimen name="about_padding_top">15dp</dimen>
+    <dimen name="grade_dialog_margin_top">10sp</dimen>
+    <dimen name="grade_dialog_margin_left">100sp</dimen>
 </resources>

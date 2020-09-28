@@ -147,7 +147,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginHandle(LoginBean loginBean, String username, String password){
         String code;
         code = loginBean.getCode();
-        waitEnd();
         if(code.equals("200")){
             if (ifSaveAccount.isChecked()){
                 updateDB(username,password);
@@ -163,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }else {//502
             showToast("教务系统无相应");
         }
+        waitEnd();
     }
     private void showToast(final String msg){
         runOnUiThread(new Runnable() {

@@ -135,6 +135,7 @@ public class welcomeActivity extends Activity {
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",username)
                             .add("password",password)
+                            .add("agent", Version.getVersion())
                             .build();
                     Request request = new Request.Builder()
                             .url("http://47.106.159.165:8081/login")
@@ -189,7 +190,7 @@ public class welcomeActivity extends Activity {
     private void showUpdateDialog(final String url) {
         downloadURL = url;
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("有新版本可用")
-                .setMessage("是否更新").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setMessage("是否更新").setPositiveButton("更新", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         startNextActivity();
@@ -215,7 +216,7 @@ public class welcomeActivity extends Activity {
     private void showFirstUseDialog(){
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("新版本介绍")
                 .setMessage("当前版本新特性:\n\n" +
-                        "\t\t1.课表点击查看详情\n\n\t\t2.UI界面优化\n\n\t\t3.查询绩点" +
+                        "\t\t1.成绩界面UI优化\n\n\t\t2.新增上传头像功能\n\n\t\t3.查询绩点bug修复\n\n\t\t4.课程表改为以周日为第一天" +
                         "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
@@ -246,7 +247,7 @@ public class welcomeActivity extends Activity {
                     VersionBean versionBean = Utills.parseJSON(responseData, VersionBean.class);
                     SharedPreferences sharedPreferences = getSharedPreferences("FirstRun",MODE_PRIVATE);
                     boolean first_run = sharedPreferences.getBoolean("isFirstRun",true);
-                    if (versionBean.getData().getVersionName().equals(Version.getVersion())){
+                    if (!Version.isNeedUpdate(versionBean.getData().getVersionName())){
                         showNoticeForNone();
                         if (first_run){
                             sharedPreferences.edit().putBoolean("isFirstRun",false).apply();

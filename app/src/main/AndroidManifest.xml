@@ -42,7 +42,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="长理教务v2.2.0.fileprovider"
+            android:authorities="长理教务v2.4.0.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

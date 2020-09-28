@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/drawable_round_edge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/name"
+        android:padding="10dp"
+        android:text="专业英语（计算机）"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/pscj_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#000"
+            android:text="平时成绩："
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/pscj"
+            android:padding="10dp"
+            android:text="80"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/pscj_bl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grade_dialog_margin_top">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#000"
+            android:text="平时成绩比例："
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/pscj_bl"
+            android:padding="10dp"
+            android:text="20%"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/qzcj_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grade_dialog_margin_top">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="期中成绩："
+            android:textColor="#000"
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/qzcj"
+            android:padding="10dp"
+            android:text="82"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/qzcj_bl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grade_dialog_margin_top">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="期中成绩比例："
+            android:textColor="#000"
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/qzcj_bl"
+            android:padding="10dp"
+            android:text="10%"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/qmcj_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grade_dialog_margin_top">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="期末成绩："
+            android:textColor="#000"
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/qmcj"
+            android:padding="10dp"
+            android:text="75"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/qmcj_bl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grade_dialog_margin_top"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="期末成绩比例："
+            android:textColor="#000"
+            android:layout_centerVertical="true"/>
+        <!--009966 20-->
+        <TextView
+            android:id="@+id/qmcj_bl"
+            android:padding="10dp"
+            android:text="70%"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/grade_dialog_margin_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

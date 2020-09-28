@@ -19,6 +19,7 @@ public class GradeBean {
         private String point;
         private String method;
         private String property;
+        private String pscjUrl;
         private String nature;
     }
 }

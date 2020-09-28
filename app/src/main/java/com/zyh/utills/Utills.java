@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +91,7 @@ public class Utills {
                                 course2Items, ((TimetableFragment) timetableFragment).nowWeek,
                                 ((TimetableFragment) timetableFragment).semester,
                                 ((TimetableFragment) timetableFragment).originalSemester,index);
+                        //课表点击事件
                         Utills.initCourseControl(activity,((TimetableFragment) timetableFragment).courseLists.get(index),courseItems,course2Items);
                     }
                 });
@@ -219,6 +221,90 @@ public class Utills {
 
         }
     }
+    public static void showGradeDialog(final Activity activity,final String name,final String pscj,final String pscjbl,final String qzcj,final String qzcjbl,final String qmcj,final String qmcjbl){
+        // 构建dialog显示的view布局
+        View view_dialog = activity.getLayoutInflater().from(activity).inflate(R.layout.view_grade_dialog, null);
+        ((TextView)view_dialog.findViewById(R.id.name)).setText(name);
+        ((TextView)view_dialog.findViewById(R.id.pscj)).setText(pscj);
+        ((TextView)view_dialog.findViewById(R.id.pscj_bl)).setText(pscjbl);
+        ((TextView)view_dialog.findViewById(R.id.qzcj)).setText(qzcj);
+        ((TextView)view_dialog.findViewById(R.id.qzcj_bl)).setText(qzcjbl);
+        ((TextView)view_dialog.findViewById(R.id.qmcj)).setText(qmcj);
+        ((TextView)view_dialog.findViewById(R.id.qmcj_bl)).setText(qmcjbl);
+//        if ((pscj==null||pscj.equals(""))&&(pscjbl==null||pscjbl.equals(""))){
+//            ((RelativeLayout)view_dialog.findViewById(R.id.pscj_layout)).setVisibility(View.GONE);
+//            ((RelativeLayout)view_dialog.findViewById(R.id.pscj_bl_layout)).setVisibility(View.GONE);
+//        }
+//        if ((qzcj==null||qzcj.equals(""))&&(qzcjbl==null||qzcjbl.equals(""))){
+//            ((RelativeLayout)view_dialog.findViewById(R.id.qzcj_layout)).setVisibility(View.GONE);
+//            ((RelativeLayout)view_dialog.findViewById(R.id.qzcj_bl_layout)).setVisibility(View.GONE);
+//        }
+//        if ((qmcj==null||qmcj.equals(""))&&(qmcjbl==null&&qmcjbl.equals(""))){
+//            ((RelativeLayout)view_dialog.findViewById(R.id.qmcj_layout)).setVisibility(View.GONE);
+//            ((RelativeLayout)view_dialog.findViewById(R.id.qmcj_bl_layout)).setVisibility(View.GONE);
+//        }
+        dialog = new AlertDialog.Builder(activity)
+                .create();
+        dialog.show();
+        // 设置点击可取消
+        dialog.setCancelable(true);
+
+        // 获取Window对象
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        //设置宽度
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.width = 850;// 调整该值可以设置对话框显示的宽度
+        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        // 设置显示视图内容
+        window.setContentView(view_dialog);
+
+//        if (dialog == null){
+//            // 创建AlertDialog对象
+//            dialog = new AlertDialog.Builder(activity)
+//                    .create();
+//            dialog.show();
+//            // 设置点击可取消
+//            dialog.setCancelable(true);
+//
+//            // 获取Window对象
+//            Window window = dialog.getWindow();
+//            window.setBackgroundDrawableResource(android.R.color.transparent);
+//            //设置宽度
+//            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+//            lp.width = 850;// 调整该值可以设置对话框显示的宽度
+//            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//            window.setAttributes(lp);
+//            // 设置显示视图内容
+//            window.setContentView(view_dialog);
+//        }else {
+//            try {
+//                dialog.show();
+//                Window window = dialog.getWindow();
+//                window.setContentView(view_dialog);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                dialog = new AlertDialog.Builder(activity)
+//                        .create();
+//                dialog.show();
+//                // 设置点击可取消
+//                dialog.setCancelable(true);
+//
+//                // 获取Window对象
+//                Window window = dialog.getWindow();
+//                window.setBackgroundDrawableResource(android.R.color.transparent);
+//                //设置宽度
+//                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+//                lp.width = 850;// 调整该值可以设置对话框显示的宽度
+//                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                window.setAttributes(lp);
+//                // 设置显示视图内容
+//                window.setContentView(view_dialog);
+//            }
+//
+//        }
+    }
 
     public static void showCourseMsgOnUi(final Activity activity, final List<List<CourseBean.Course>> courseList,
                                   final TextView month,final TextView monthWord,final TextView[] weekDate,
@@ -273,11 +359,15 @@ public class Utills {
                         int maxDay = Utills.getMonthday(yearMonStr);
                         //月份
                         String monthStr = Integer.parseInt(yearMonDay[1])+"";
-                        month.setText(monthStr);
+                        month.setText(CalendarUtil.getMonthOfSpecifiedDayBefore(weekMonStr));
                         monthWord.setVisibility(View.VISIBLE);
                         //日期
                         int day =  Integer.parseInt(yearMonDay[2]);
                         for(int i=0;i<weekDate.length;i++){
+                            if (i==0){//星期天，第一天
+                                weekDate[i].setText(CalendarUtil.getDayOfSpecifiedDayBefore(weekMonStr));
+                                continue;
+                            }
                             if (day>maxDay) day=1;
                             weekDate[i].setText(day+"");
                             day++;
@@ -337,13 +427,14 @@ public class Utills {
                                       Course[][] courseMsgs,CardView[][] course2Items,Course[][] course2Msgs){
         Log.d("initCourseView","working");
         /*weekDate*/
-        weekDate[0] = (TextView)view.findViewById(R.id.table_Mondaydate);
-        weekDate[1] = (TextView)view.findViewById(R.id.table_Tuesdaydate);
-        weekDate[2] = (TextView)view.findViewById(R.id.table_Wednesdaydate);
-        weekDate[3] = (TextView)view.findViewById(R.id.table_Thursdaydate);
-        weekDate[4] = (TextView)view.findViewById(R.id.table_Fridaydate);
-        weekDate[5] = (TextView)view.findViewById(R.id.table_Saturdaydate);
-        weekDate[6] = (TextView)view.findViewById(R.id.table_Sundaydate);
+        weekDate[0] = (TextView)view.findViewById(R.id.table_Sundaydate);
+        weekDate[1] = (TextView)view.findViewById(R.id.table_Mondaydate);
+        weekDate[2] = (TextView)view.findViewById(R.id.table_Tuesdaydate);
+        weekDate[3] = (TextView)view.findViewById(R.id.table_Wednesdaydate);
+        weekDate[4] = (TextView)view.findViewById(R.id.table_Thursdaydate);
+        weekDate[5] = (TextView)view.findViewById(R.id.table_Fridaydate);
+        weekDate[6] = (TextView)view.findViewById(R.id.table_Saturdaydate);
+
         /*courseItems*/
 
         courseItems[0][0] = (CardView) view.findViewById(R.id.course_1_1);
