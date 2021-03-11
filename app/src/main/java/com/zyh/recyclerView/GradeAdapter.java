@@ -139,7 +139,7 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> 
                             .add("pscjUrl",pscjUrl)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/queryPscj")
+                            .url("http://42.193.177.76:8081/queryPscj")
                             .post(requestBody)
                             .addHeader("token",token)
                             .build();

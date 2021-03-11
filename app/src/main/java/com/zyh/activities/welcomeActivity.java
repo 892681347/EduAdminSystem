@@ -138,7 +138,7 @@ public class welcomeActivity extends Activity {
                             .add("agent", Version.getVersion())
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/login")
+                            .url("http://42.193.177.76:8081/login")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -216,7 +216,7 @@ public class welcomeActivity extends Activity {
     private void showFirstUseDialog(){
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("新版本介绍")
                 .setMessage("当前版本新特性:\n\n" +
-                        "\t\t1.成绩界面UI优化\n\n\t\t2.新增上传头像功能\n\n\t\t3.查询绩点bug修复\n\n\t\t4.课程表改为以周日为第一天" +
+                        "\t\t1.界面UI优化\n\n\t\t2.服务器地址更换\n\n\t\t3.新增打赏功能\n\n\t\t4.上传头像算法优化" +
                         "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
@@ -240,7 +240,7 @@ public class welcomeActivity extends Activity {
                 try{
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/getLastVersion")
+                            .url("http://42.193.177.76:8081/getLastVersion")
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();

@@ -169,7 +169,7 @@
             android:layout_height="38dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/shape_corner5"
+            android:background="@drawable/button_radius_reward"
             android:text="关于"
             android:textColor="#ffffff"
             android:textSize="17sp" />

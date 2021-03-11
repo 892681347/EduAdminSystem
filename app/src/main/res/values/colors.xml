@@ -4,9 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorMain">#66CCCC</color>
+    <color name="reward">#EC7259</color>
     <color name="colorBottom">#FFFFFF</color>
     <color name="grade_item_text">#000</color>
     <color name="feedback_text_color">#949494</color>
     <color name="grade_item_text_color">#383838</color>
     <color name="colorPop">#40cab3</color>
+    <color name="nodeIndex" >#00000000</color>
 </resources>

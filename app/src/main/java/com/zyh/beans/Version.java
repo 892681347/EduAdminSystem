@@ -9,11 +9,12 @@ public class Version {
      * 1.version 当前版本号
      * 2.apkName 用于下载一下版本apk后，打开指定文件的文件名
      * 3.Manifest中的<provider>，授予打开指定文件的权限，十分重要！！！
-     */
-    //上一版v2.2.0
-    private final static String version = "v2.3.0"; //更新时不能比上一版本少“.”
+     * 4.修改build.gradle中的版本号
+     * */
+    //上一版v2.3.0
+    private final static String version = "v2.4.0"; //更新时不能比上一版本少“.”
     // 如果apk文件名为1.apk，则此处填1,同时需修改Manifest中的<provider>
-    private final static String apkName = "长理教务v2.4.0";   //这是下一版的名字，用于下载下一版apk，同时需修改Manifest中的<provider>！！！
+    private final static String apkName = "长理教务v2.5.0";   //这是下一版的名字，用于下载下一版apk，同时需修改Manifest中的<provider>！！！
     public static String getVersion() {
         return version;
     }

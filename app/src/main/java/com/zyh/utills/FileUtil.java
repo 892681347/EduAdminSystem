@@ -194,6 +194,7 @@ public class FileUtil {
     }
     //压缩图片
     public static File compress( File originFile) {
+        if(getFileOrFilesSize(originFile)<=0.8) return originFile;
         File newPic;
         File sdFile = Environment.getExternalStorageDirectory();
         Bitmap bitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath());

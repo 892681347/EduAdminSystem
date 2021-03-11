@@ -1,5 +1,7 @@
 package com.zyh.beans;
 
+import android.content.Intent;
+
 import org.litepal.crud.LitePalSupport;
 
 import lombok.Getter;

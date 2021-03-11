@@ -5,7 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="at">&#064;</string>
     <string name="github_website">"https://github.com/892681347/EduAdminSystem"</string>
-    <string name="about_word">"若在第一版(v2.0.1)基础上更新会导致安装失败（密钥不一致），需删除原app后安装apk。"
-        "想要参与到本项目开发甚至是接手的同学请联系QQ892681347。"
-        "对App有任何的建议，都可以反馈给我们。非常期待您推荐给身边的同学。"</string>
+    <string name="about_word">"若更新安装失败，需删除原app后安装apk。"
+        "对App有任何的建议，都可以反馈给我们。非常期待您推荐给身边的同学。"
+        "欢迎加入app交流群：955731766。"
+        "打赏了的人都会变好看（☆∀☆）谢谢老板"</string>
+    <string name="save_picture">"保存图片"</string>
+
 </resources>

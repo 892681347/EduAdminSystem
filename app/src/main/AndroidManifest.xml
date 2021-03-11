@@ -42,13 +42,27 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="长理教务v2.4.0.fileprovider"
+            android:authorities="长理教务v2.5.0.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <receiver android:name="com.zyh.widget.WidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.skywang.widget.UPDATE_ALL"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <service android:name="com.zyh.widget.WidgetService" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

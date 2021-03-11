@@ -128,7 +128,7 @@ public class GradeFragment extends Fragment {
                             .add("xueqi",semester)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/queryScore")
+                            .url("http://42.193.177.76:8081/queryScore")
                             .post(requestBody)
                             .addHeader("token",token)
                             .build();

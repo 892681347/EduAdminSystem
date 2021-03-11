@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             .add("agent", Version.getVersion())
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/login")
+                            .url("http://42.193.177.76:8081/login")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

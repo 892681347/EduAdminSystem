@@ -262,7 +262,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                     OkHttpClient client = new OkHttpClient();
                     Log.d("MainActivity","ActionBegin:3Haven't get semesters");
                     Request request = new Request.Builder()
-                            .url("http://47.106.159.165:8081/getAllSemester")
+                            .url("http://42.193.177.76:8081/getAllSemester")
                             .addHeader("token",token)
                             .build();
                     Log.d("MainActivity","ActionBegin:4Haven't get semesters");
