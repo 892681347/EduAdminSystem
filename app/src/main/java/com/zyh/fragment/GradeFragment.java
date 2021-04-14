@@ -91,7 +91,7 @@ public class GradeFragment extends Fragment {
                 Log.d("GradeFragment","notFinished");
             }
             RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.grade_recycler_view);
-            TextView noGrade = (TextView) getActivity().findViewById(R.id.no_grade);
+            LinearLayout noGrade = getActivity().findViewById(R.id.no_grade);
             TextView tip = getActivity().findViewById(R.id.tip);
             if (gradeList==null){
                 recyclerView.setVisibility(View.INVISIBLE);

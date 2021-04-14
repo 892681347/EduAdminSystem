@@ -14,26 +14,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.zyh.activities.MainActivity;
 import com.zyh.beans.Course;
 import com.zyh.beans.CourseBean;
+import com.zyh.beans.CourseList;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
-import com.zyh.fragment.timetableFragment.TimetableFragment1;
+
+import org.litepal.LitePal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 import okhttp3.FormBody;
@@ -42,17 +50,57 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.ContentValues.TAG;
 import static com.zyh.utills.WeekUtil.getWeekDays;
 import static org.litepal.LitePalApplication.getContext;
 
 public class Utills {
-    private static int[] colors = {0x64ff00ff,0xb44d3900,0xb4f400a1,0xb4daa520,0xb44169e1,0xb4b509ff};
+    private static String TAG = "Utills";
+    private static Stack<Thread> threadStack = new Stack();
+    static Map<String, Integer> map = new HashMap();
+    static List<Integer> list = new ArrayList<>();
+    static List<Integer> full = new ArrayList<>();
+    //private static int[] colors = {0x64ff00ff,0xff4d3900,0xfff400a1,0xffdaa520,0xff4169e1,0xffb509ff,0xff67758A};
+//    private static int[] colors = {0xffffb703,0xfffb8500,0xffa8dadc,0xffef476f,0xff52b788,0xffabc4ff,0xb416697a,0xff8e7dbe,
+//            0xff5e503f,0xffff99c8,0xffcbdfbd,0xb4002ca6,0xffbd2c00,0xffe8d9b5,0xff6f7f8d,
+//            0xff008272,0xfff4dc2a,0xff1da1f2,0xffe3caff,0xff00ffff};
+//    private static int[] colors = {0xFF68B0AB,0xFFCBDEB9,0xFFEDCD8D,0xFFF2B581,0xFFF1C4AC,0xFFCAE8D5
+//            ,0xFFC4CDC7,0xFFE5CFE5,0xFF6CD0BC,0xFF78789B,0xFFFF6D6C,0xFFB96273,0XFF79A3D9,0XFFA49DBE
+//            ,0XFF9C7D7D,0XFFABAFB3,0XFF66CCFF};
+    private static int[] colors = {0xFFFF2E63,0xFF66BFBF,0xFFFF9999,0XFFE889E5,0xFF4791B1,0xFF00BBF0
+            ,0xFFE6CFE5,0xFF74B49B,0xFFAC73FF,0xFFA1D9FF,0xFFFF5126,0xFFFACF5A,0XFFF2B581,0xFF79A3D9};
     private static AlertDialog dialog = null;
-
-    public static int randomColor(){
-        return colors[new Random().nextInt(colors.length)];
+    public static void clear(){
+        for(int i=0;i<colors.length;i++){
+            full.add(colors[i]);
+        }
+        list.clear();
+        map.clear();
     }
-
+    public static int randomColor(String name){
+        if(map.get(name)!=null) return map.get(name);
+        if(list.containsAll(full)) list.clear();
+        int color = colors[new Random().nextInt(colors.length)];
+        int index = 0;
+        for(int i=0;i<colors.length;i++){
+            if(colors[i]==color){
+                index = i;
+                break;
+            }
+        }
+        while(list.contains(color)){
+            index = (index+1)%colors.length;
+            color = colors[index];
+            Log.d(TAG, "randomColor: SSS");
+        }
+        list.add(color);
+        map.put(name, color);
+        return color;
+    }
+    public static String controlWords(String words){
+        if(words.length()<=6) return words;
+        else return words.substring(0,5)+"...";
+    }
     public static void setCurrentSemester(String[] datas,String semester,Spinner spinner){
         for(int i=0;i<datas.length;i++){
             if (datas[i].equals(semester)){
@@ -73,15 +121,34 @@ public class Utills {
         return (TimetableFragment)timetableFragment;
     }
 
+    /**
+     * 由每个TimetableFragment调用
+     * @param timetableFragment
+     * @param activity
+     * @param courseList 网络返回的课程数据
+     * @param month 具体月份
+     * @param monthWord “月”字
+     * @param weekDate 每天的日期（年月日的日）
+     * @param courseMsgs 常规课程数据
+     * @param course2Msgs 两大节课程数据
+     * @param courseItems 常规课程cardView
+     * @param course2Items 两大节课程cardView
+     * @param nowWeek 当前学习周
+     * @param semester 当前学期
+     * @param originalSemester
+     * @param index 学习周，决定取courseList数组中的哪一组
+     */
     public static void showTimetable(final Fragment timetableFragment, final Activity activity, final List<List<CourseBean.Course>> courseList,
                                      final TextView month, final TextView monthWord, final TextView[] weekDate,
                                      final Course[][] courseMsgs, final Course[][] course2Msgs, final CardView[][] courseItems
             , final CardView[][] course2Items, final String nowWeek,
-                                     final String semester, final String originalSemester, final int index){
+                                     final String semester, final String originalSemester, final LinearLayout[] weekLinearLayout, final int index){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!((TimetableFragment) timetableFragment).isFinished[index]){}
+                while(!((TimetableFragment) timetableFragment).isFinished[index]){
+                    //Log.i(TAG,"wait for courseList_"+index);
+                }
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -92,6 +159,11 @@ public class Utills {
                                 ((TimetableFragment) timetableFragment).semester,
                                 ((TimetableFragment) timetableFragment).originalSemester,index);
                         //课表点击事件
+                        if(TimetableFragment.isThisSemester && TimetableFragment.thisWeek==index){
+                            Date date = new Date(); // this object contains the current date value
+                            SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
+                            weekLinearLayout[CalendarUtil.getOneWeekday(dateFm.format(date))].setBackgroundResource(R.drawable.shape_corner_table);
+                        }
                         Utills.initCourseControl(activity,((TimetableFragment) timetableFragment).courseLists.get(index),courseItems,course2Items);
                     }
                 });
@@ -332,7 +404,7 @@ public class Utills {
                                 courseMsg = courseMsgs[i][j];
                             }
                             courseItem.setVisibility(View.VISIBLE);
-                            courseItem.setCardBackgroundColor(Utills.randomColor());
+                            courseItem.setCardBackgroundColor(Utills.randomColor(course.getCourseName()));
                             courseMsg.getCourseName().setText(course.getCourseName());
                             courseMsg.getCourseAddress().setText("@"+course.getAddress());
                             if (course.getTime().contains("双周")){
@@ -404,6 +476,7 @@ public class Utills {
 
     public static void showIsNowWeek(Spinner spinner,String originalSemester,TextView isNowWeek,
                                      String selectedWeek,String nowWeek){
+        if (((String)spinner.getSelectedItem()).equals(originalSemester)) TimetableFragment.isThisSemester = true;
         if (((String)spinner.getSelectedItem()).equals(originalSemester) && selectedWeek.equals(nowWeek)){
             isNowWeek.setText("本周");
         }else {
@@ -423,8 +496,16 @@ public class Utills {
         return t;
     }
 
-    public static void initCourseView(View view,TextView[] weekDate,CardView[][] courseItems,
-                                      Course[][] courseMsgs,CardView[][] course2Items,Course[][] course2Msgs){
+    public static void initCourseView(View view, TextView[] weekDate, CardView[][] courseItems,
+                                      Course[][] courseMsgs, CardView[][] course2Items, Course[][] course2Msgs, LinearLayout[] weekLinearLayout){
+
+        weekLinearLayout[1] = view.findViewById(R.id.monday_linear);
+        weekLinearLayout[2] = view.findViewById(R.id.tuesday_linear);
+        weekLinearLayout[3] = view.findViewById(R.id.wednesday_linear);
+        weekLinearLayout[4] = view.findViewById(R.id.thursday_linear);
+        weekLinearLayout[5] = view.findViewById(R.id.friday_linear);
+        weekLinearLayout[6] = view.findViewById(R.id.saturday_linear);
+        weekLinearLayout[7] = view.findViewById(R.id.sunday_linear);
         Log.d("initCourseView","working");
         /*weekDate*/
         weekDate[0] = (TextView)view.findViewById(R.id.table_Sundaydate);
@@ -619,7 +700,101 @@ public class Utills {
             }
         }).start();
     }
+    public static void postAllTimetable(final LoginBean loginBean, final Fragment timetableFragment, final String semester, final int nowWeek){
+        while(!threadStack.empty()){
+            Thread t = threadStack.pop();
+            try{
+                //t.interrupt();
+            }catch (Exception e){
+                Log.e(TAG,e.getMessage());
+            }
 
+        }
+        //查询数据库是否有存该用户当前学期的课表，若有则返回
+        String username = ((MainActivity)timetableFragment.getActivity()).username;
+
+        CourseList couList = LitePal.where("semester = ? and username = ?",semester,username).findFirst(CourseList.class);
+        if(couList!=null) {
+            //Toast.makeText(timetableFragment.getActivity(),"not empty!"+couList.getUsername()+"  "+couList.getSemester(),Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"list is not empty! "+couList.getUsername()+"  "+couList.getSemester());
+            for(int i=1;i<=20;i++){
+                Log.i(TAG,"this couList "+i+" is "+couList.getCourseResponseDatas().get(i));
+                CourseBean courseBean = Utills.parseJSON(couList.getCourseResponseDatas().get(i),CourseBean.class);
+                if(((TimetableFragment)timetableFragment).semester.equals(semester)){
+                    ((TimetableFragment)timetableFragment).courseLists.set(i,courseBean.getData());
+                    ((TimetableFragment) timetableFragment).isFinished[i] = true;
+                }
+            }
+            return;
+        }else Log.i(TAG,"list is empty!");
+        List<String> list = new ArrayList<>();
+        for(int i=0;i<=20;i++){
+            list.add(null);
+        }
+        CourseList cList = new CourseList();
+        cList.setUsername(username);
+        cList.setSemester(semester);
+        final String cookie = loginBean.getData().getCookie();
+        final String token = loginBean.getData().getToken();
+        Thread T = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean flag = false;
+                for(int week=nowWeek;;week = (week+1)%21){
+                    if(week==0) week = 1;
+                    if(flag && week==nowWeek) {
+                        //储存该用户当前学期的课表
+                        cList.setCourseResponseDatas(list);
+                        for(int i=1;i<=20;i++){
+                            if(cList.getCourseResponseDatas().get(i)==null) Log.i(TAG,"this cList "+i+" is null!!!");
+                            else Log.i(TAG,"this cList "+i+" is "+cList.getCourseResponseDatas().get(i));
+                        }
+
+                        cList.save();
+                        CourseList cList1 = LitePal.where("semester = ?",semester).findFirst(CourseList.class);
+                        Log.i(TAG,"save success "+semester);
+                        for(int i=1;i<=20;i++){
+                            if(cList1.getCourseResponseDatas().get(i)==null) Log.i(TAG,"this cList "+i+" is null!!!");
+                            else Log.i(TAG,"this cList "+i+" is "+cList1.getCourseResponseDatas().get(i));
+                        }
+                        break;
+                    }
+
+                    if(week==nowWeek) flag = true;
+                    try{
+                        OkHttpClient client = new OkHttpClient();
+                        RequestBody requestBody = new FormBody.Builder()
+                                .add("cookie",cookie)
+                                .add("xueqi",semester)
+                                .add("zc",week+"")
+                                .build();
+                        Request request = new Request.Builder()
+                                .url("http://42.193.177.76:8081/getCourse")
+                                .post(requestBody)
+                                .addHeader("token",token)
+                                .build();
+                        Response response = client.newCall(request).execute();
+                        String responseData = response.body().string();
+                        //存入课程数据
+                        list.set(week,responseData);
+                        CourseBean courseBean = Utills.parseJSON(responseData,CourseBean.class);
+                        if(((TimetableFragment)timetableFragment).semester.equals(semester)){
+                            ((TimetableFragment)timetableFragment).courseLists.set(week,courseBean.getData());
+                            ((TimetableFragment) timetableFragment).isFinished[week] = true;
+                        }
+                        Log.i(TAG,"have gotten "+semester+" courseList_"+week);
+                    }catch (Exception e) {
+                        Log.d("okHttpError","okHttpError");
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        });
+        threadStack.push(T);
+        T.start();
+
+    }
     public static void postTimetable(final LoginBean loginBean, final Fragment timetableFragment, final String semester, final String week) {
         final String cookie = loginBean.getData().getCookie();
         final String token = loginBean.getData().getToken();

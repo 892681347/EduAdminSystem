@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#66CCCC</color>
+<!--    008577-->
+    <color name="colorPrimaryDark">#66CCCC</color>
+<!--    00574B-->
+    <color name="colorAccent">#008577</color>
+<!--    #D81B60-->
     <color name="colorMain">#66CCCC</color>
     <color name="reward">#EC7259</color>
     <color name="colorBottom">#FFFFFF</color>
@@ -11,4 +14,8 @@
     <color name="grade_item_text_color">#383838</color>
     <color name="colorPop">#40cab3</color>
     <color name="nodeIndex" >#00000000</color>
+    <color name="widget_text_color" >#000</color>
+    <color name="black" >#000000</color>
+    <color name="white" >#FFFFFF</color>
+    <color name="text_color_default" >#000000</color>
 </resources>

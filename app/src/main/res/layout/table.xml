@@ -29,15 +29,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/sunday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/table_perday_marginleft">
+            android:layout_marginLeft="@dimen/table_perday_marginleft"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日"
+                android:text="周日"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Sundaydate"
@@ -46,15 +49,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/monday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down"
             android:layout_marginLeft="@dimen/table_perday_marginleft">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="一"
+                android:text="周一"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Mondaydate"
@@ -63,15 +69,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/tuesday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down"
             android:layout_marginLeft="@dimen/table_perday_marginleft">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="二"
+                android:text="周二"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Tuesdaydate"
@@ -80,15 +89,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/wednesday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/table_perday_marginleft">
+            android:layout_marginLeft="@dimen/table_perday_marginleft"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="三"
+                android:text="周三"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Wednesdaydate"
@@ -97,15 +109,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/thursday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down"
             android:layout_marginLeft="@dimen/table_perday_marginleft">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="四"
+                android:text="周四"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Thursdaydate"
@@ -114,15 +129,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/friday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down"
             android:layout_marginLeft="@dimen/table_perday_marginleft">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="五"
+                android:text="周五"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Fridaydate"
@@ -131,15 +149,18 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/saturday_linear"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="@dimen/table_weekday_padding_top_down"
+            android:paddingBottom="@dimen/table_weekday_padding_top_down"
             android:layout_marginLeft="@dimen/table_perday_marginleft">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="六"
+                android:text="周六"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/table_Saturdaydate"
@@ -150,7 +171,8 @@
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
@@ -273,6 +295,7 @@
                                 android:id="@+id/course_7_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -311,6 +334,7 @@
                                 android:id="@+id/course_7_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -352,6 +376,7 @@
                                     android:id="@+id/course_7_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -392,6 +417,7 @@
                                     android:id="@+id/course_7_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -430,6 +456,7 @@
                                     android:id="@+id/course_7_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -468,6 +495,7 @@
                                     android:id="@+id/course_7_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -506,6 +534,7 @@
                                     android:id="@+id/course_7_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -552,6 +581,7 @@
                                 android:id="@+id/course_1_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -590,6 +620,7 @@
                                 android:id="@+id/course_1_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -631,6 +662,7 @@
                                     android:id="@+id/course_1_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -671,6 +703,7 @@
                                     android:id="@+id/course_1_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -709,6 +742,7 @@
                                     android:id="@+id/course_1_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -747,6 +781,7 @@
                                     android:id="@+id/course_1_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -785,6 +820,7 @@
                                     android:id="@+id/course_1_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -831,6 +867,7 @@
                                 android:id="@+id/course_2_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -869,6 +906,7 @@
                                 android:id="@+id/course_2_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -910,6 +948,7 @@
                                     android:id="@+id/course_2_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -950,6 +989,7 @@
                                     android:id="@+id/course_2_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -988,6 +1028,7 @@
                                     android:id="@+id/course_2_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1026,6 +1067,7 @@
                                     android:id="@+id/course_2_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1064,6 +1106,7 @@
                                     android:id="@+id/course_2_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1110,6 +1153,7 @@
                                 android:id="@+id/course_3_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1148,6 +1192,7 @@
                                 android:id="@+id/course_3_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1189,6 +1234,7 @@
                                     android:id="@+id/course_3_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -1229,6 +1275,7 @@
                                     android:id="@+id/course_3_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1267,6 +1314,7 @@
                                     android:id="@+id/course_3_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1305,6 +1353,7 @@
                                     android:id="@+id/course_3_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1343,6 +1392,7 @@
                                     android:id="@+id/course_3_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1389,6 +1439,7 @@
                                 android:id="@+id/course_4_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1427,6 +1478,7 @@
                                 android:id="@+id/course_4_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1468,6 +1520,7 @@
                                     android:id="@+id/course_4_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -1508,6 +1561,7 @@
                                     android:id="@+id/course_4_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1546,6 +1600,7 @@
                                     android:id="@+id/course_4_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1584,6 +1639,7 @@
                                     android:id="@+id/course_4_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1622,6 +1678,7 @@
                                     android:id="@+id/course_4_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1668,6 +1725,7 @@
                                 android:id="@+id/course_5_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1706,6 +1764,7 @@
                                 android:id="@+id/course_5_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1747,6 +1806,7 @@
                                     android:id="@+id/course_5_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -1787,6 +1847,7 @@
                                     android:id="@+id/course_5_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1825,6 +1886,7 @@
                                     android:id="@+id/course_5_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1863,6 +1925,7 @@
                                     android:id="@+id/course_5_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1901,6 +1964,7 @@
                                     android:id="@+id/course_5_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -1947,6 +2011,7 @@
                                 android:id="@+id/course_6_12_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -1985,6 +2050,7 @@
                                 android:id="@+id/course_6_34_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:textSize="@dimen/table_context_textsize"
                                 android:text="专业英语"
                                 android:textColor="#fff"/>
@@ -2026,6 +2092,7 @@
                                     android:id="@+id/course_6_1_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:text="专业英语"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:textColor="#fff"/>
@@ -2066,6 +2133,7 @@
                                     android:id="@+id/course_6_2_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -2104,6 +2172,7 @@
                                     android:id="@+id/course_6_3_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -2142,6 +2211,7 @@
                                     android:id="@+id/course_6_4_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>
@@ -2180,6 +2250,7 @@
                                     android:id="@+id/course_6_5_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/table_context_textsize"
                                     android:text="专业英语"
                                     android:textColor="#fff"/>

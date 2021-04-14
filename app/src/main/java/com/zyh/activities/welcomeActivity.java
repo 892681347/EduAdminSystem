@@ -55,6 +55,7 @@ public class welcomeActivity extends Activity {
     private final int NOTICE = 1;
     private int status = 0;
     private int serviceStatus = 0;
+    private String account;
 
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -73,7 +74,7 @@ public class welcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         postVersion();
         serviceInit();
         if(ContextCompat.checkSelfPermission(welcomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
@@ -96,7 +97,7 @@ public class welcomeActivity extends Activity {
             public void run() {
                 List<Account> lastAccount = LitePal.where("isLast = ?","1").find(Account.class);
                 if (!lastAccount.isEmpty()){
-                    String account = lastAccount.get(0).getUsername();
+                    account = lastAccount.get(0).getUsername();
 
                     String pw = lastAccount.get(0).getPassword();
                     if (pw!=null && pw!=""){
@@ -158,7 +159,7 @@ public class welcomeActivity extends Activity {
         String code = loginBean.getCode();
         if(code.equals("200")){
             Intent intent = new Intent(welcomeActivity.this,MainActivity.class);
-            MainActivity.actionStart(this, loginBean);
+            MainActivity.actionStart(this, loginBean,account);
         }else if (code.equals("501")){
             showToast("服务器错误，请联系开发人员");
         }else {//502
@@ -203,6 +204,16 @@ public class welcomeActivity extends Activity {
                         startNextActivity();
                         dialogInterface.dismiss();
                     }
+                }).setNeutralButton("手动更新", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("http://42.193.177.76:8081/apk/CSUST.apk"));
+                        startActivity(intent);
+                        showNoticeForNone();
+                        startNextActivity();
+                        dialog.dismiss();
+                    }
                 });
         runOnUiThread(new Runnable() {
             @Override
@@ -216,7 +227,7 @@ public class welcomeActivity extends Activity {
     private void showFirstUseDialog(){
         builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("新版本介绍")
                 .setMessage("当前版本新特性:\n\n" +
-                        "\t\t1.界面UI优化\n\n\t\t2.服务器地址更换\n\n\t\t3.新增打赏功能\n\n\t\t4.上传头像算法优化" +
+                        "\t\t1.新增课表桌面小部件\n\n\t\t2.ui界面优化\n\n\t\t3.算法更新-同课程颜色相同\n\n\t\t4.课表存入本地数据库" +
                         "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override

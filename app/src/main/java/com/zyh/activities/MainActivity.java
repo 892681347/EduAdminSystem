@@ -68,18 +68,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     private LinearLayout addFeedback;
 
     public LoginBean loginBean;
+    public String username;
     public String[] semesters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
-//            //透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            //透明导航栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        }
         setContentView(R.layout.activity_main);
         //取消welcomActivity活动的多余通知
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -87,6 +82,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 
         Intent intent = getIntent();
         loginBean = (LoginBean) intent.getSerializableExtra("loginBean");
+        username = intent.getStringExtra("username");
         Log.d("MainActivity","ActionBegin:Already get loginBean");
         postSemester(loginBean.getData().getToken());
         initViews();//初始化控件
@@ -100,9 +96,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         });
     }
 
-    public static void actionStart(Context context, LoginBean loginBean){
+    public static void actionStart(Context context, LoginBean loginBean, String username){
         Intent intent = new Intent(context,MainActivity.class);
         intent.putExtra("loginBean", loginBean);
+        intent.putExtra("username", username);
         context.startActivity(intent);
         ((Activity)context).finish();
     }
@@ -258,24 +255,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
             @Override
             public void run() {
                 try{
-                    Log.d("MainActivity","ActionBegin:2Haven't get semesters");
                     OkHttpClient client = new OkHttpClient();
-                    Log.d("MainActivity","ActionBegin:3Haven't get semesters");
                     Request request = new Request.Builder()
                             .url("http://42.193.177.76:8081/getAllSemester")
                             .addHeader("token",token)
                             .build();
-                    Log.d("MainActivity","ActionBegin:4Haven't get semesters");
                     Response response = client.newCall(request).execute();
-                    Log.d("MainActivity","ActionBegin:5Haven't get semesters");
                     String responseData = response.body().string();
-                    Log.d("MainActivity","ActionBegin:6Haven't get semesters");
                     SemesterBean semesterBean = Utills.parseJSON(responseData, SemesterBean.class);
-                    Log.d("MainActivity","ActionBegin:7Haven't get semesters");
                     semesters = semesterBean.getData();
-                    Log.d("MainActivity","ActionBegin:Already get semesters");
                 }catch (Exception e) {
-                    Log.d("okHttpError","okHttpError");
                     e.printStackTrace();
                 }
             }

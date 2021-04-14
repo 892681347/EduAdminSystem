@@ -44,6 +44,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CheckBox ifSaveAccount;
     ImageView ifView;
     ProgressBar progressBar;
+    private static String username;
+
+    private String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +78,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onClick(View v){
         if (v.getId()==R.id.send_request){
-            String username = usernameEdit.getText().toString();
-            String password = passwordEdit.getText().toString();
+            username = usernameEdit.getText().toString();
+            password = passwordEdit.getText().toString();
             if (username.equals("")||password.equals("")){
                 String nameword;
                 if (username.equals("") && password.equals("")) nameword="账号和密码";
@@ -154,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 updateDB(username);
             }
             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            MainActivity.actionStart(this, loginBean);
+            MainActivity.actionStart(this, loginBean,username);
         }else if(code.equals("401")){
             showToast("账号或密码错误");
         }else if (code.equals("501")){
@@ -219,6 +222,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         Log.d("allAccount",allAccount);
     }
+
+    /**
+     * 将所有项的last设为0
+     */
     private void setAllLast(){
         Account account = new Account();
         account.setIsLast("0");

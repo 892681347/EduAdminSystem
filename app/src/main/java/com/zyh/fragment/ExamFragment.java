@@ -96,7 +96,7 @@ public class ExamFragment extends Fragment {
                 Log.d("ExamFragment","notFinished");
             }
             RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.exam_recycler_view);
-            TextView noGrade = (TextView) getActivity().findViewById(R.id.no_exam);
+            LinearLayout noGrade = getActivity().findViewById(R.id.no_exam);
             if (examList==null){
                 recyclerView.setVisibility(View.INVISIBLE);
                 noGrade.setVisibility(View.VISIBLE);

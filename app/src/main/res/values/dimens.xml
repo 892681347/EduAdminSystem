@@ -3,19 +3,23 @@
     <dimen name="table_left_width">20dp</dimen>
     <!-- table.xml页面中每节课信息的textsize -->
     <dimen name="table_context_textsize">12sp</dimen>
+    <dimen name="widget_table_context_textsize">10sp</dimen>
     <!-- table.xml页面中每天的上面标题和下面每个课程CardView的marginLeft -->
     <dimen name="table_perday_marginleft">3dp</dimen>
     <!-- table.xml页面中每个课程CardView中放课程信息的LinearLayout的padding -->
     <dimen name="course_item_linearlayout_padding">2dp</dimen>
     <!-- table.xml页面左下面节次中每一节次TextView的layout_height -->
     <dimen name="table_left_lessonnumber">56dp</dimen><!-- ① -->
+    <dimen name="widget_table_left_lessonnumber">46dp</dimen><!-- ① -->
     <!-- table.xml页面中每个课程CardView的margin -->
     <dimen name="course_item_margintop">2dp</dimen><!-- ② -->
     <!-- table.xml页面中每个课程CardView的layout_height -->
     <dimen name="course_item_layout_height">110dp</dimen><!-- ③ -->
+    <dimen name="widget_course_item_layout_height">90dp</dimen><!-- ③ -->
                                                                 <!-- ① * 2 = ② + ③ -->
     <!-- table.xml页面中跨4节课每个课程CardView的layout_height -->
     <dimen name="course_item_layout_height2">222dp</dimen><!-- ③ -->
+    <dimen name="widget_course_item_layout_height2">182dp</dimen><!-- ③ -->
 
 
     <dimen name="grade_item_text_title_size">15sp</dimen>

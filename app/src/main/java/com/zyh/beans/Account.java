@@ -14,4 +14,8 @@ public class Account extends LitePalSupport {
     private String username;
     private String password;
     private String isLast;
+    //用于widget
+    private String semester;
+    private String time;
+    private String week;
 }

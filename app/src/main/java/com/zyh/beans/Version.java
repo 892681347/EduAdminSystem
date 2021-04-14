@@ -12,9 +12,9 @@ public class Version {
      * 4.修改build.gradle中的版本号
      * */
     //上一版v2.3.0
-    private final static String version = "v2.4.0"; //更新时不能比上一版本少“.”
+    private final static String version = "v2.5.0"; //更新时不能比上一版本少“.”
     // 如果apk文件名为1.apk，则此处填1,同时需修改Manifest中的<provider>
-    private final static String apkName = "长理教务v2.5.0";   //这是下一版的名字，用于下载下一版apk，同时需修改Manifest中的<provider>！！！
+    private final static String apkName = "长理教务v3.1.0";   //这是下一版的名字，用于下载下一版apk，同时需修改Manifest中的<provider>！！！
     public static String getVersion() {
         return version;
     }

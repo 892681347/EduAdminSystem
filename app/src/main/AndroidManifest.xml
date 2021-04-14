@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.zyh.activities.About"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+            android:theme="@style/AppTheme_2"/>
 
         <service
             android:name="com.zyh.update.DownloadService"
@@ -25,6 +25,7 @@
 
         <activity
             android:name="com.zyh.activities.welcomeActivity"
+            android:theme="@style/AppTheme_2"
             android:icon="@mipmap/ic_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,35 +35,35 @@
         </activity>
         <activity
             android:name="com.zyh.activities.FeedbackActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity android:name="com.zyh.activities.MainActivity" />
+            android:theme="@style/AppTheme_2" />
+        <activity android:name="com.zyh.activities.MainActivity"
+            android:theme="@style/AppTheme_1" />
         <activity
             android:name="com.zyh.activities.LoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/AppTheme_2" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="长理教务v2.5.0.fileprovider"
+            android:authorities="长理教务v3.1.0.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver android:name="com.zyh.widget.WidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.skywang.widget.UPDATE_ALL"/>
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
-        </receiver>
+        <receiver android:name="com.zyh.widget.TableWidgetProvider_1" >
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info" >
+            </meta-data>
 
-        <service android:name="com.zyh.widget.WidgetService" >
             <intent-filter>
-                <action android:name="android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE" />
+                <action android:name="com.ryg.chapter_5.action.CLICK" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.zyh.eduadminsystem.NEXT_WEEK" />
+                <action android:name="com.zyh.eduadminsystem.NOW_WEEK" />
             </intent-filter>
-        </service>
+        </receiver>
     </application>
 
 </manifest>

@@ -16,35 +16,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.zyh.activities.MainActivity;
+import com.zyh.beans.Account;
 import com.zyh.beans.CourseBean;
 import com.zyh.beans.LoginBean;
-import com.zyh.fragment.timetableFragment.TimetableFragment1;
-import com.zyh.fragment.timetableFragment.TimetableFragment10;
-import com.zyh.fragment.timetableFragment.TimetableFragment11;
-import com.zyh.fragment.timetableFragment.TimetableFragment12;
-import com.zyh.fragment.timetableFragment.TimetableFragment13;
-import com.zyh.fragment.timetableFragment.TimetableFragment14;
-import com.zyh.fragment.timetableFragment.TimetableFragment15;
-import com.zyh.fragment.timetableFragment.TimetableFragment16;
-import com.zyh.fragment.timetableFragment.TimetableFragment17;
-import com.zyh.fragment.timetableFragment.TimetableFragment18;
-import com.zyh.fragment.timetableFragment.TimetableFragment19;
-import com.zyh.fragment.timetableFragment.TimetableFragment2;
-import com.zyh.fragment.timetableFragment.TimetableFragment20;
-import com.zyh.fragment.timetableFragment.TimetableFragment3;
-import com.zyh.fragment.timetableFragment.TimetableFragment4;
-import com.zyh.fragment.timetableFragment.TimetableFragment5;
-import com.zyh.fragment.timetableFragment.TimetableFragment6;
-import com.zyh.fragment.timetableFragment.TimetableFragment7;
-import com.zyh.fragment.timetableFragment.TimetableFragment8;
-import com.zyh.fragment.timetableFragment.TimetableFragment9;
 import com.zyh.utills.Utills;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class TimetableFragment extends Fragment {
+    public static boolean isThisSemester = false;
+    public static int thisWeek;
     public LoginBean loginBean;
     private Spinner spinner;
     private ArrayAdapter<String> adapter1;
@@ -61,7 +46,7 @@ public class TimetableFragment extends Fragment {
             ,null,null,null,null,null,null,null,null,null,null,null,null);
 //    ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
 //            , "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21")
-    public List<List<List<CourseBean.Course>>> courseLists = Arrays.asList(null,null,null,null,null,null,null,null,null
+    public List<List<List<CourseBean.Course>>> courseLists = Arrays.asList(null,null,null,null,null,null,null,null,null   //21个
         ,null,null,null,null,null,null,null,null,null,null,null,null);
     private TextView weekText;
     private TextView isNowWeek;
@@ -101,10 +86,23 @@ public class TimetableFragment extends Fragment {
         loginBean = mainActivity.loginBean;
         Log.d("nowWeek",loginBean.getData().getNowWeek());
         semester = loginBean.getData().getNowXueqi();
+
         originalSemester = semester;
         nowWeek = loginBean.getData().getNowWeek();
+        thisWeek = Integer.valueOf(nowWeek);
+        //更新当前用户的当前学期、周次、登录时间
+        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+        sdf.applyPattern("yyyy-MM-dd");// a为am/pm的标记
+        Date date = new Date();// 获取当前时间
+        String username = ((MainActivity) getActivity()).username;
+        Account account = new Account();
+        account.setSemester(semester);
+        account.setWeek(nowWeek);
+        account.setTime(sdf.format(date));
+        account.updateAll("username = ?",username);
 
         initDatas();//初始化数据
+        //Utills.postAllTimetable(loginBean,this,semester,Integer.parseInt(nowWeek));
 
         adapter1 = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,27 +128,9 @@ public class TimetableFragment extends Fragment {
 
     private void initDatas() {
         mFragments = new ArrayList<>();
-//        mFragments.add(new TestFragment());
-        mFragments.add(new TimetableFragment1());
-        mFragments.add(new TimetableFragment2());
-        mFragments.add(new TimetableFragment3());
-        mFragments.add(new TimetableFragment4());
-        mFragments.add(new TimetableFragment5());
-        mFragments.add(new TimetableFragment6());
-        mFragments.add(new TimetableFragment7());
-        mFragments.add(new TimetableFragment8());
-        mFragments.add(new TimetableFragment9());
-        mFragments.add(new TimetableFragment10());
-        mFragments.add(new TimetableFragment11());
-        mFragments.add(new TimetableFragment12());
-        mFragments.add(new TimetableFragment13());
-        mFragments.add(new TimetableFragment14());
-        mFragments.add(new TimetableFragment15());
-        mFragments.add(new TimetableFragment16());
-        mFragments.add(new TimetableFragment17());
-        mFragments.add(new TimetableFragment18());
-        mFragments.add(new TimetableFragment19());
-        mFragments.add(new TimetableFragment20());
+        for(int i=1;i<=20;i++){
+            mFragments.add(TimetableFragmentItem.newInstance(i));
+        }
 
 
         //初始化适配器
@@ -209,11 +189,13 @@ public class TimetableFragment extends Fragment {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            Utills.clear();
             semester = datas[position];
+            weekText.setText("1");
             for(int i=0;i<isFinished.length;i++){
                 isFinished[i] = false;
             }
-            weekText.setText("1");
+            Utills.postAllTimetable(loginBean,TimetableFragment.this,semester,1);
             initDatas();
             Utills.showIsNowWeek(spinner,originalSemester,isNowWeek,selectedWeek,nowWeek);
         }
