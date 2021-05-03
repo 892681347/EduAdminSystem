@@ -10,7 +10,7 @@
     <color name="reward">#EC7259</color>
     <color name="colorBottom">#FFFFFF</color>
     <color name="grade_item_text">#000</color>
-    <color name="feedback_text_color">#949494</color>
+    <color name="feedback_text_color">#4c4c4c</color>
     <color name="grade_item_text_color">#383838</color>
     <color name="colorPop">#40cab3</color>
     <color name="nodeIndex" >#00000000</color>
@@ -18,4 +18,8 @@
     <color name="black" >#000000</color>
     <color name="white" >#FFFFFF</color>
     <color name="text_color_default" >#000000</color>
+    <color name="add_note" >#E6EDF3</color>
+    <color name="add_note_subtitle" >#4c4c4c</color>
+    <color name="add_note_content" >#000000</color>
+    <color name="note" >#b2c8da</color>
 </resources>

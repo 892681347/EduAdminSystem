@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xuexiang.xui.XUI;
 import com.zyh.beans.LoginBean;
 import com.zyh.beans.SemesterBean;
 import com.zyh.fragment.ExamFragment;
@@ -76,6 +78,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        XUI.initTheme(this);
         //取消welcomActivity活动的多余通知
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.cancel(10);
@@ -95,6 +98,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
             }
         });
     }
+
 
     public static void actionStart(Context context, LoginBean loginBean, String username){
         Intent intent = new Intent(context,MainActivity.class);

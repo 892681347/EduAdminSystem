@@ -9,20 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
+import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
+import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener;
 import com.zyh.activities.MainActivity;
 import com.zyh.beans.GradeBean;
 import com.zyh.beans.LoginBean;
-import com.zyh.beans.SemesterBean;
 import com.zyh.recyclerView.GradeAdapter;
 import com.zyh.utills.Utills;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -33,10 +31,14 @@ import okhttp3.Response;
 
 public class GradeFragment extends Fragment {
     private LoginBean loginBean;
-    private Spinner spinner;
+    private TextView selectGrade;
+    private LinearLayout selectGradeLinear;
+    private int gradeSelectOption = 0;
     private LinearLayout grade_point_block;
     private TextView grade_point;
-    private ArrayAdapter<String> adapter;
+    private RecyclerView recyclerView;
+    private LinearLayout noGrade;
+    private TextView tip;
     private MainActivity mainActivity;
     private String[] datas;
     public String semester;
@@ -48,7 +50,11 @@ public class GradeFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         View view = inflater.inflate(R.layout.grade, container, false);
         isFinished = false;
-        spinner = (Spinner)view.findViewById(R.id.gradeSpinner);
+        tip = view.findViewById(R.id.tip);
+        noGrade = view.findViewById(R.id.no_grade);
+        recyclerView = view.findViewById(R.id.grade_recycler_view);
+        selectGrade = view.findViewById(R.id.select_grade);
+        selectGradeLinear = view.findViewById(R.id.select_grade_linear);
         grade_point_block = view.findViewById(R.id.grade_point_block);
         grade_point = view.findViewById(R.id.grade_point);
         waitingAndSet();
@@ -69,51 +75,70 @@ public class GradeFragment extends Fragment {
                     @Override
                     public void run() {
                         loginBean = mainActivity.loginBean;
-                        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinner.setAdapter(adapter);
-                        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
+                        selectGradeLinear.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPickerView();
+                            }
+                        });
                         semester = loginBean.getData().getNowXueqi();
-                        Utills.setCurrentSemester(datas,semester,spinner);
-                        spinner.setVisibility(View.VISIBLE);
+                        for(int i=0;i<datas.length;i++){
+                            if (datas[i].equals(semester)){
+                                showGrade(i);
+                            }
+                        }
                     }
                 });
             }
         }).start();
     }
-    class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String semester = datas[position];
-            postGrade(semester);
-            while(isFinished.equals(false)){
-                Log.d("GradeFragment","notFinished");
+    private void showPickerView() {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(mainActivity, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                showGrade(options1);
             }
-            RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.grade_recycler_view);
-            LinearLayout noGrade = getActivity().findViewById(R.id.no_grade);
-            TextView tip = getActivity().findViewById(R.id.tip);
-            if (gradeList==null){
-                recyclerView.setVisibility(View.INVISIBLE);
-                grade_point_block.setVisibility(View.INVISIBLE);
-                noGrade.setVisibility(View.VISIBLE);
-                tip.setVisibility(View.GONE);
-                isFinished = false;
-            }else {
-                recyclerView.setVisibility(View.VISIBLE);
-                grade_point_block.setVisibility(View.VISIBLE);
-                noGrade.setVisibility(View.INVISIBLE);
-                tip.setVisibility(View.VISIBLE);
-                showGradeRecyclerView();
-                showGradePoint(gradeList);
+        })
+                .setTitleText("选择学期")
+                .setSelectOptions(gradeSelectOption)
+                .build();
+        pvOptions.setPicker(datas);
+        pvOptions.show();
+    }
+    private void showGrade(int options){
+        selectGrade.setText(datas[options]);
+        gradeSelectOption = options;
+        String semester = datas[options];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                postGrade(semester);
+                while(isFinished.equals(false)){
+                    Log.d("GradeFragment","notFinished");
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (gradeList==null){
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            grade_point_block.setVisibility(View.INVISIBLE);
+                            noGrade.setVisibility(View.VISIBLE);
+                            tip.setVisibility(View.GONE);
+                            isFinished = false;
+                        }else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            grade_point_block.setVisibility(View.VISIBLE);
+                            noGrade.setVisibility(View.INVISIBLE);
+                            tip.setVisibility(View.VISIBLE);
+                            showGradeRecyclerView();
+                            showGradePoint(gradeList);
+                        }
+                    }
+                });
             }
+        }).start();
 
-        }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
     }
     private void postGrade(final String semester) {
         final String cookie = loginBean.getData().getCookie();

@@ -4,50 +4,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
-        android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Spinner android:id="@+id/timetableSpinner1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
+        <LinearLayout
+            android:id="@+id/select_timetable_linear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="第"
-            android:layout_marginLeft="10dp"
-            android:textSize="17sp"/>
-        <TextView
-            android:id="@+id/text_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textSize="17sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="周"
-            android:textSize="17sp"/>
-        <TextView
-            android:id="@+id/text_isnowweek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="非本周"
-            android:layout_marginLeft="15dp"
-            android:textSize="17sp"/>
-    </LinearLayout>
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/calendar"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/select_timetable"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="2019-2020-2"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/down"/>
+        </LinearLayout>
 
-        <!--<TextView-->
-            <!--android:id="@+id/timetableInfo"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="20sp"-->
-            <!--android:gravity="center"-->
-            <!--android:textSize="20sp"/>-->
-    <!--</ScrollView>-->
+        <LinearLayout
+            android:id="@+id/grade_point_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第"
+                android:layout_marginLeft="10dp"
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/text_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="周"
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/text_isnowweek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="非本周"
+                android:layout_marginLeft="15dp"
+                android:textSize="17sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/id_viewpager1"
         android:layout_width="match_parent"

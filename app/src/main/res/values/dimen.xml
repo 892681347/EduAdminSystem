@@ -11,4 +11,5 @@
     <dimen name="widget_text_size_data">13sp</dimen>
     <dimen name="widget_text_size">11sp</dimen>
     <dimen name="table_weekday_padding_top_down">5dp</dimen>
+    <dimen name="add_note_text_size">16dp</dimen>
 </resources>

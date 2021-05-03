@@ -8,36 +8,60 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
-            <Spinner android:id="@+id/gradeSpinner"
+            android:background="#ffffff">
+            <LinearLayout
+                android:id="@+id/select_grade_linear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"/>
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/calendar"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/select_grade"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:text="2019-2020-2"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/down"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/grade_point_block"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:orientation="horizontal"
                 android:visibility="invisible"
-                android:layout_gravity="center">
+                android:layout_centerVertical="true">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="平均绩点： "
-                    android:layout_marginLeft="50dp"/>
+                    android:textColor="@color/grade_item_text_color"
+                    android:text="平均绩点： "/>
                 <TextView
                     android:id="@+id/grade_point"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/grade_item_text_color"
                     android:text="3.5"/>
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <android.support.v7.widget.RecyclerView

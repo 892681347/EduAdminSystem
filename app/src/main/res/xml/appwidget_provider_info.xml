@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/table_widget_1"
-    android:minHeight="200dp"
-    android:minWidth="200dp"
-    android:updatePeriodMillis="1000" >
+    android:minHeight="320dp"
+    android:minWidth="320dp"
+    android:resizeMode="vertical|horizontal"
+    android:updatePeriodMillis="3600000" >
 <!--    previewImage 指定了小部件在小部件列表里的预览图-->
 </appwidget-provider>

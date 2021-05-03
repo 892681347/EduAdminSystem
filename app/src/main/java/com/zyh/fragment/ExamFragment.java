@@ -17,6 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
+import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
+import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener;
 import com.zyh.activities.MainActivity;
 import com.zyh.beans.ExamBean;
 import com.zyh.beans.GradeBean;
@@ -39,8 +42,11 @@ import okhttp3.Response;
 
 public class ExamFragment extends Fragment {
     private LoginBean loginBean;
-    private Spinner spinner;
-    private ArrayAdapter<String> adapter;
+    private LinearLayout selectExamLinear;
+    private TextView selectExam;
+    private RecyclerView recyclerView;
+    private LinearLayout noGrade;
+    private int examSelectOption = 0;
     public String semester;
     private String[] datas;
     private List<ExamBean.Exam> examList;
@@ -52,7 +58,10 @@ public class ExamFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.exam, container, false);
         isFinished = false;
-        spinner = (Spinner)view.findViewById(R.id.examSpinner);
+        recyclerView = view.findViewById(R.id.exam_recycler_view);
+        noGrade = view.findViewById(R.id.no_exam);
+        selectExamLinear = view.findViewById(R.id.select_exam_linear);
+        selectExam = view.findViewById(R.id.select_exam);
         mainActivity = (MainActivity)getActivity();
         waitingAndSet();
         return view;
@@ -73,45 +82,63 @@ public class ExamFragment extends Fragment {
                     public void run() {
                         datas = mainActivity.semesters;
                         loginBean = mainActivity.loginBean;
-                        adapter = new ArrayAdapter<String>(mainActivity,android.R.layout.simple_spinner_item,datas);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinner.setAdapter(adapter);
-                        spinner.setOnItemSelectedListener(new SpinnerSelectedListener());
                         semester = loginBean.getData().getNowXueqi();
-                        Utills.setCurrentSemester(datas,semester,spinner);
-                        spinner.setVisibility(View.VISIBLE);
+                        selectExamLinear.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPickerView();
+                            }
+                        });
+                        for(int i=0;i<datas.length;i++){
+                            if (datas[i].equals(semester)){
+                                showExam(i);
+                            }
+                        }
                     }
                 });
             }
         }).start();
     }
-
-    class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener{
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String semester = datas[position];
-            postExam(semester);
-            while(isFinished.equals(false)){
-                Log.d("ExamFragment","notFinished");
+    private void showPickerView() {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(mainActivity, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                showExam(options1);
             }
-            RecyclerView recyclerView = (RecyclerView)getActivity().findViewById(R.id.exam_recycler_view);
-            LinearLayout noGrade = getActivity().findViewById(R.id.no_exam);
-            if (examList==null){
-                recyclerView.setVisibility(View.INVISIBLE);
-                noGrade.setVisibility(View.VISIBLE);
-                isFinished = false;
-            }else {
-                recyclerView.setVisibility(View.VISIBLE);
-                noGrade.setVisibility(View.INVISIBLE);
-                showExamRecyclerView();
+        })
+                .setTitleText("选择学期")
+                .setSelectOptions(examSelectOption)
+                .build();
+        pvOptions.setPicker(datas);
+        pvOptions.show();
+    }
+    private void showExam(int options){
+        selectExam.setText(datas[options]);
+        examSelectOption = options;
+        String semester = datas[options];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                postExam(semester);
+                while(isFinished.equals(false)){
+                    Log.d("ExamFragment","notFinished");
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (examList==null){
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            noGrade.setVisibility(View.VISIBLE);
+                            isFinished = false;
+                        }else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            noGrade.setVisibility(View.INVISIBLE);
+                            showExamRecyclerView();
+                        }
+                    }
+                });
             }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
+        }).start();
     }
     private void postExam(final String semester) {
         final String cookie = loginBean.getData().getCookie();
@@ -146,7 +173,9 @@ public class ExamFragment extends Fragment {
                             "\"ticketNumber\":\"\"},{\"campus\":\"云塘校区\",\"courseName\":\"计算机图形学\"," +
                             "\"teacher\":\"桂彦\",\"startTime\":\"2019-12-26 09:20\",\"endTime\":\"2019-12-26 11:20\"," +
                             "\"address\":\"云综教B-406\",\"seatNumber\":\"\",\"ticketNumber\":\"\"}]}";
-                    */
+
+                     */
+
                     ExamBean examBean = Utills.parseJSON(responseData,ExamBean.class);
                     examList = examBean.getData();
                     isFinished = true;

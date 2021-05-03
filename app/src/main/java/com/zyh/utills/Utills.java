@@ -22,12 +22,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zyh.activities.MainActivity;
+import com.zyh.activities.NoteActivity;
 import com.zyh.beans.Course;
 import com.zyh.beans.CourseBean;
 import com.zyh.beans.CourseList;
 import com.zyh.beans.LoginBean;
+import com.zyh.beans.Note;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
+import com.zyh.fragment.TimetableFragmentItem;
 
 import org.litepal.LitePal;
 
@@ -60,15 +63,9 @@ public class Utills {
     static Map<String, Integer> map = new HashMap();
     static List<Integer> list = new ArrayList<>();
     static List<Integer> full = new ArrayList<>();
-    //private static int[] colors = {0x64ff00ff,0xff4d3900,0xfff400a1,0xffdaa520,0xff4169e1,0xffb509ff,0xff67758A};
-//    private static int[] colors = {0xffffb703,0xfffb8500,0xffa8dadc,0xffef476f,0xff52b788,0xffabc4ff,0xb416697a,0xff8e7dbe,
-//            0xff5e503f,0xffff99c8,0xffcbdfbd,0xb4002ca6,0xffbd2c00,0xffe8d9b5,0xff6f7f8d,
-//            0xff008272,0xfff4dc2a,0xff1da1f2,0xffe3caff,0xff00ffff};
-//    private static int[] colors = {0xFF68B0AB,0xFFCBDEB9,0xFFEDCD8D,0xFFF2B581,0xFFF1C4AC,0xFFCAE8D5
-//            ,0xFFC4CDC7,0xFFE5CFE5,0xFF6CD0BC,0xFF78789B,0xFFFF6D6C,0xFFB96273,0XFF79A3D9,0XFFA49DBE
-//            ,0XFF9C7D7D,0XFFABAFB3,0XFF66CCFF};
     private static int[] colors = {0xFFFF2E63,0xFF66BFBF,0xFFFF9999,0XFFE889E5,0xFF4791B1,0xFF00BBF0
             ,0xFFE6CFE5,0xFF74B49B,0xFFAC73FF,0xFFA1D9FF,0xFFFF5126,0xFFFACF5A,0XFFF2B581,0xFF79A3D9};
+
     private static AlertDialog dialog = null;
     public static void clear(){
         for(int i=0;i<colors.length;i++){
@@ -77,6 +74,7 @@ public class Utills {
         list.clear();
         map.clear();
     }
+
     public static int randomColor(String name){
         if(map.get(name)!=null) return map.get(name);
         if(list.containsAll(full)) list.clear();
@@ -97,6 +95,7 @@ public class Utills {
         map.put(name, color);
         return color;
     }
+
     public static String controlWords(String words){
         if(words.length()<=6) return words;
         else return words.substring(0,5)+"...";
@@ -109,9 +108,11 @@ public class Utills {
         }
     }
 
+
     public static TimetableFragment getTimetableFragmeent(Fragment fragment){
         Fragment timetableFragment = null;
-        List<Fragment>list=(List<Fragment>) fragment.getFragmentManager().getFragments();
+        List<Fragment>list=(List<Fragment>) fragment.getActivity().getSupportFragmentManager().getFragments();
+
         for(Fragment f:list){
             if(f!=null && f instanceof TimetableFragment){
                 timetableFragment = f;
@@ -142,7 +143,10 @@ public class Utills {
                                      final TextView month, final TextView monthWord, final TextView[] weekDate,
                                      final Course[][] courseMsgs, final Course[][] course2Msgs, final CardView[][] courseItems
             , final CardView[][] course2Items, final String nowWeek,
-                                     final String semester, final String originalSemester, final LinearLayout[] weekLinearLayout, final int index){
+                                     final String semester, final String originalSemester,
+                                     final LinearLayout[] weekLinearLayout, final LinearLayout[][] showAddNotes,
+                                     final LinearLayout[][] addNotes, final TimetableFragmentItem timetableFragmentItem,
+                                     final CardView[][] notes, final TextView[][] noteNames, final int index){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -152,35 +156,116 @@ public class Utills {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //显示课程信息
                         Utills.showCourseMsgOnUi(activity,
                                 ((TimetableFragment) timetableFragment).courseLists.get(index),
                                 month,monthWord,weekDate,courseMsgs,course2Msgs,courseItems,
                                 course2Items, ((TimetableFragment) timetableFragment).nowWeek,
                                 ((TimetableFragment) timetableFragment).semester,
                                 ((TimetableFragment) timetableFragment).originalSemester,index);
-                        //课表点击事件
-                        if(TimetableFragment.isThisSemester && TimetableFragment.thisWeek==index){
-                            Date date = new Date(); // this object contains the current date value
-                            SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
-                            weekLinearLayout[CalendarUtil.getOneWeekday(dateFm.format(date))].setBackgroundResource(R.drawable.shape_corner_table);
-                        }
-                        Utills.initCourseControl(activity,((TimetableFragment) timetableFragment).courseLists.get(index),courseItems,course2Items);
+                        //显示备注
+                        Utills.showNote(activity,notes,noteNames,index+"",((TimetableFragment) timetableFragment).semester,courseList);
+                        //添加备注
+                        Utills.addNote(activity,courseItems,notes,showAddNotes,addNotes,timetableFragmentItem, index+"",
+                                ((TimetableFragment) timetableFragment).semester);
                     }
                 });
             }
         }).start();
-    }
+        //本学期本周标注星期几
+        if(TimetableFragment.isThisSemester && TimetableFragment.thisWeek==index){
+            Date date = new Date(); // this object contains the current date value
+            SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
+            weekLinearLayout[CalendarUtil.getOneWeekday(dateFm.format(date))].setBackgroundResource(R.drawable.shape_corner_table);
+        }
+        //课表点击事件
+        Utills.initCourseControl(timetableFragmentItem, activity,((TimetableFragment) timetableFragment).courseLists.get(index),courseItems,course2Items);
 
-    public static void initCourseControl(final Activity activity,final List<List<CourseBean.Course>> courseList,
+
+    }
+    public static void addNote(Activity activity, CardView[][] courseItems,CardView[][] notes, LinearLayout[][] showAddNotes, LinearLayout[][] addNotes,
+                                TimetableFragmentItem timetableFragmentItem, String nowWeek, String semester){
+        for(int i=0;i<5;i++){ //课程第几节
+            for(int j=0;j<7;j++){ //星期几
+                final int time = i+1;
+                final int dayInWeek = j+1;
+                LinearLayout addNote = addNotes[i][j];
+                LinearLayout showAddNote = showAddNotes[i][j];
+                if(courseItems[i][j].getVisibility()==View.VISIBLE||notes[i][j].getVisibility()==View.VISIBLE){
+                    showAddNote.setVisibility(View.INVISIBLE);
+                }else {
+                    showAddNote.setVisibility(View.VISIBLE);
+                }
+                addNote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i(TAG,"addNote");
+                        addNote.setVisibility(View.INVISIBLE);
+                        showAddNote.setVisibility(View.VISIBLE);
+                        NoteActivity.actionStart(activity,((MainActivity)activity).username,semester,nowWeek,dayInWeek,time,true);
+                        Log.i(TAG,"return back");
+                    }
+                });
+                showAddNote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i(TAG,"showAddNote");
+                        if(timetableFragmentItem.nowAddNote!=null) timetableFragmentItem.nowAddNote.setVisibility(View.INVISIBLE);
+                        if(timetableFragmentItem.nowShowAddNote!=null) timetableFragmentItem.nowShowAddNote.setVisibility(View.VISIBLE);
+                        showAddNote.setVisibility(View.INVISIBLE);
+                        addNote.setVisibility(View.VISIBLE);
+                        timetableFragmentItem.nowAddNote = addNote;
+                        timetableFragmentItem.nowShowAddNote = showAddNote;
+                    }
+                });
+            }
+        }
+    }
+    //显示备注
+    public static void showNote(Activity activity,CardView[][] notes, TextView[][] noteNames, String nowWeek,
+                                 String semester, List<List<CourseBean.Course>> courseList){
+        for(int i=0;i<5;i++){
+            for (int j=0;j<7;j++){
+                if (courseList==null||courseList.get(i).get(j)==null){
+                    Log.i(TAG,"username:  "+((MainActivity)activity).username);
+                    Note note = LitePal.where("username = ? and semester = ? and week = ? and " +
+                                    "dayInWeek = ? and time = ?",((MainActivity)activity).username,semester,nowWeek,
+                            j+1+"",i+1+"").findFirst(Note.class);
+                    if(note!=null){
+                        final int time = i+1;
+                        final int dayInWeek = j+1;
+                        //默认颜色
+                        CardView noteView = notes[i][j];
+                        TextView noteName = noteNames[i][j];
+                        noteView.setVisibility(View.VISIBLE);
+                        noteView.setCardBackgroundColor(Utills.randomColor(note.getName()));
+                        noteName.setText(note.getName());
+
+                        noteView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                NoteActivity.actionStart(activity,((MainActivity)activity).username,semester,nowWeek,dayInWeek,time,false);
+                                Log.i(TAG,"return back");
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+    public static void initCourseControl(final TimetableFragmentItem timetableFragmentItem,final Activity activity,final List<List<CourseBean.Course>> courseList,
                                          final CardView[][] courseItems,final CardView[][] course2Items){
         if(courseList==null) return;
         for(int i=0;i<5;i++){
             for (int j=0;j<7;j++){
                 CourseBean.Course course = courseList.get(i).get(j);
-
+                if(course==null) continue;
                 courseItems[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(timetableFragmentItem.nowAddNote!=null) timetableFragmentItem.nowAddNote.setVisibility(View.INVISIBLE);
+                        if(timetableFragmentItem.nowShowAddNote!=null) timetableFragmentItem.nowShowAddNote.setVisibility(View.VISIBLE);
+
                         String name =course.getCourseName();
                         String address = course.getAddress();
                         String teacher = course.getTeacher();
@@ -209,10 +294,13 @@ public class Utills {
                 int h = 0;
                 if (i==1) h = 2;
                 CourseBean.Course course = courseList.get(h).get(j);
-
+                if(course==null) continue;
                 course2Items[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(timetableFragmentItem.nowAddNote!=null) timetableFragmentItem.nowAddNote.setVisibility(View.INVISIBLE);
+                        if(timetableFragmentItem.nowShowAddNote!=null) timetableFragmentItem.nowShowAddNote.setVisibility(View.VISIBLE);
+
                         String name =course.getCourseName();
                         String address = course.getAddress();
                         String teacher = course.getTeacher();
@@ -387,12 +475,13 @@ public class Utills {
             @Override
             public void run() {
                 //显示课程信息
+                CardView courseItem;
+                Course courseMsg;
                 for(int i=0;i<5;i++){
+                    if(courseList==null) continue;
                     for (int j=0;j<7;j++){
-                        if (courseList!=null && courseList.get(i).get(j)!=null){
+                        if (courseList.get(i).get(j)!=null){
                             CourseBean.Course course = courseList.get(i).get(j);
-                            CardView courseItem;
-                            Course courseMsg;
                             if (course.getTime().contains("01-02-03-04")){    //跨两大节的课
                                 courseItem = course2Items[0][j];
                                 courseMsg = course2Msgs[0][j];
@@ -414,7 +503,20 @@ public class Utills {
                                 courseMsg.getCourseProperty().setVisibility(View.VISIBLE);
                                 courseMsg.getCourseProperty().setText("单周");
                             }
-
+                        }else{
+                            /*
+                            Note note = LitePal.where("semester = ? and week = ? and " +
+                                    "dayInWeek = ? and time = ?",semester,nowWeek,
+                                    j+1+"",i+1+"").findFirst(Note.class);
+                            if(note!=null){
+                                courseItem = courseItems[i][j];
+                                courseMsg = courseMsgs[i][j];
+                                courseItem.setVisibility(View.VISIBLE);
+                                courseItem.setCardBackgroundColor(courseItem.getResources().getColor(R.color.add_note));
+                                courseMsg.getCourseName().setText(note.getName());
+                                courseMsg.getCourseAddress().setText("@"+note.getPlace());
+                            }
+                            */
                         }
                     }
                 }
@@ -474,10 +576,11 @@ public class Utills {
         return 0;
     }
 
-    public static void showIsNowWeek(Spinner spinner,String originalSemester,TextView isNowWeek,
+    public static void showIsNowWeek(String selectSemester,String originalSemester,TextView isNowWeek,
                                      String selectedWeek,String nowWeek){
-        if (((String)spinner.getSelectedItem()).equals(originalSemester)) TimetableFragment.isThisSemester = true;
-        if (((String)spinner.getSelectedItem()).equals(originalSemester) && selectedWeek.equals(nowWeek)){
+        if (selectSemester.equals(originalSemester)) TimetableFragment.isThisSemester = true;
+        else TimetableFragment.isThisSemester = false;
+        if (selectSemester.equals(originalSemester) && selectedWeek.equals(nowWeek)){
             isNowWeek.setText("本周");
         }else {
             isNowWeek.setText("非本周");
@@ -497,7 +600,10 @@ public class Utills {
     }
 
     public static void initCourseView(View view, TextView[] weekDate, CardView[][] courseItems,
-                                      Course[][] courseMsgs, CardView[][] course2Items, Course[][] course2Msgs, LinearLayout[] weekLinearLayout){
+                                      Course[][] courseMsgs, CardView[][] course2Items,
+                                      Course[][] course2Msgs, LinearLayout[] weekLinearLayout,
+                                      LinearLayout[][] showAddNotes, LinearLayout[][] addNotes,
+                                      CardView[][] notes, TextView[][] noteNames){
 
         weekLinearLayout[1] = view.findViewById(R.id.monday_linear);
         weekLinearLayout[2] = view.findViewById(R.id.tuesday_linear);
@@ -558,7 +664,176 @@ public class Utills {
         courseItems[4][5] = (CardView) view.findViewById(R.id.course_6_5);
         courseItems[4][6] = (CardView) view.findViewById(R.id.course_7_5);
 
-        /*courseMsgs*/
+        /*showAddNotes*/
+
+        showAddNotes[0][0] = view.findViewById(R.id.show_add_note_1_1);
+        showAddNotes[0][1] = view.findViewById(R.id.show_add_note_2_1);
+        showAddNotes[0][2] = view.findViewById(R.id.show_add_note_3_1);
+        showAddNotes[0][3] = view.findViewById(R.id.show_add_note_4_1);
+        showAddNotes[0][4] = view.findViewById(R.id.show_add_note_5_1);
+        showAddNotes[0][5] = view.findViewById(R.id.show_add_note_6_1);
+        showAddNotes[0][6] = view.findViewById(R.id.show_add_note_7_1);
+
+        showAddNotes[1][0] = view.findViewById(R.id.show_add_note_1_2);
+        showAddNotes[1][1] = view.findViewById(R.id.show_add_note_2_2);
+        showAddNotes[1][2] = view.findViewById(R.id.show_add_note_3_2);
+        showAddNotes[1][3] = view.findViewById(R.id.show_add_note_4_2);
+        showAddNotes[1][4] = view.findViewById(R.id.show_add_note_5_2);
+        showAddNotes[1][5] = view.findViewById(R.id.show_add_note_6_2);
+        showAddNotes[1][6] = view.findViewById(R.id.show_add_note_7_2);
+
+        showAddNotes[2][0] = view.findViewById(R.id.show_add_note_1_3);
+        showAddNotes[2][1] = view.findViewById(R.id.show_add_note_2_3);
+        showAddNotes[2][2] = view.findViewById(R.id.show_add_note_3_3);
+        showAddNotes[2][3] = view.findViewById(R.id.show_add_note_4_3);
+        showAddNotes[2][4] = view.findViewById(R.id.show_add_note_5_3);
+        showAddNotes[2][5] = view.findViewById(R.id.show_add_note_6_3);
+        showAddNotes[2][6] = view.findViewById(R.id.show_add_note_7_3);
+
+        showAddNotes[3][0] = view.findViewById(R.id.show_add_note_1_4);
+        showAddNotes[3][1] = view.findViewById(R.id.show_add_note_2_4);
+        showAddNotes[3][2] = view.findViewById(R.id.show_add_note_3_4);
+        showAddNotes[3][3] = view.findViewById(R.id.show_add_note_4_4);
+        showAddNotes[3][4] = view.findViewById(R.id.show_add_note_5_4);
+        showAddNotes[3][5] = view.findViewById(R.id.show_add_note_6_4);
+        showAddNotes[3][6] = view.findViewById(R.id.show_add_note_7_4);
+
+        showAddNotes[4][0] = view.findViewById(R.id.show_add_note_1_5);
+        showAddNotes[4][1] = view.findViewById(R.id.show_add_note_2_5);
+        showAddNotes[4][2] = view.findViewById(R.id.show_add_note_3_5);
+        showAddNotes[4][3] = view.findViewById(R.id.show_add_note_4_5);
+        showAddNotes[4][4] = view.findViewById(R.id.show_add_note_5_5);
+        showAddNotes[4][5] = view.findViewById(R.id.show_add_note_6_5);
+        showAddNotes[4][6] = view.findViewById(R.id.show_add_note_7_5);
+
+        /*addNotes*/
+
+        addNotes[0][0] = view.findViewById(R.id.add_note_1_1);
+        addNotes[0][1] = view.findViewById(R.id.add_note_2_1);
+        addNotes[0][2] = view.findViewById(R.id.add_note_3_1);
+        addNotes[0][3] = view.findViewById(R.id.add_note_4_1);
+        addNotes[0][4] = view.findViewById(R.id.add_note_5_1);
+        addNotes[0][5] = view.findViewById(R.id.add_note_6_1);
+        addNotes[0][6] = view.findViewById(R.id.add_note_7_1);
+
+        addNotes[1][0] = view.findViewById(R.id.add_note_1_2);
+        addNotes[1][1] = view.findViewById(R.id.add_note_2_2);
+        addNotes[1][2] = view.findViewById(R.id.add_note_3_2);
+        addNotes[1][3] = view.findViewById(R.id.add_note_4_2);
+        addNotes[1][4] = view.findViewById(R.id.add_note_5_2);
+        addNotes[1][5] = view.findViewById(R.id.add_note_6_2);
+        addNotes[1][6] = view.findViewById(R.id.add_note_7_2);
+
+        addNotes[2][0] = view.findViewById(R.id.add_note_1_3);
+        addNotes[2][1] = view.findViewById(R.id.add_note_2_3);
+        addNotes[2][2] = view.findViewById(R.id.add_note_3_3);
+        addNotes[2][3] = view.findViewById(R.id.add_note_4_3);
+        addNotes[2][4] = view.findViewById(R.id.add_note_5_3);
+        addNotes[2][5] = view.findViewById(R.id.add_note_6_3);
+        addNotes[2][6] = view.findViewById(R.id.add_note_7_3);
+
+        addNotes[3][0] = view.findViewById(R.id.add_note_1_4);
+        addNotes[3][1] = view.findViewById(R.id.add_note_2_4);
+        addNotes[3][2] = view.findViewById(R.id.add_note_3_4);
+        addNotes[3][3] = view.findViewById(R.id.add_note_4_4);
+        addNotes[3][4] = view.findViewById(R.id.add_note_5_4);
+        addNotes[3][5] = view.findViewById(R.id.add_note_6_4);
+        addNotes[3][6] = view.findViewById(R.id.add_note_7_4);
+
+        addNotes[4][0] = view.findViewById(R.id.add_note_1_5);
+        addNotes[4][1] = view.findViewById(R.id.add_note_2_5);
+        addNotes[4][2] = view.findViewById(R.id.add_note_3_5);
+        addNotes[4][3] = view.findViewById(R.id.add_note_4_5);
+        addNotes[4][4] = view.findViewById(R.id.add_note_5_5);
+        addNotes[4][5] = view.findViewById(R.id.add_note_6_5);
+        addNotes[4][6] = view.findViewById(R.id.add_note_7_5);
+
+        /*notes*/
+
+        notes[0][0] = view.findViewById(R.id.note_1_1);
+        notes[0][1] = view.findViewById(R.id.note_2_1);
+        notes[0][2] = view.findViewById(R.id.note_3_1);
+        notes[0][3] = view.findViewById(R.id.note_4_1);
+        notes[0][4] = view.findViewById(R.id.note_5_1);
+        notes[0][5] = view.findViewById(R.id.note_6_1);
+        notes[0][6] = view.findViewById(R.id.note_7_1);
+
+        notes[1][0] = view.findViewById(R.id.note_1_2);
+        notes[1][1] = view.findViewById(R.id.note_2_2);
+        notes[1][2] = view.findViewById(R.id.note_3_2);
+        notes[1][3] = view.findViewById(R.id.note_4_2);
+        notes[1][4] = view.findViewById(R.id.note_5_2);
+        notes[1][5] = view.findViewById(R.id.note_6_2);
+        notes[1][6] = view.findViewById(R.id.note_7_2);
+
+        notes[2][0] = view.findViewById(R.id.note_1_3);
+        notes[2][1] = view.findViewById(R.id.note_2_3);
+        notes[2][2] = view.findViewById(R.id.note_3_3);
+        notes[2][3] = view.findViewById(R.id.note_4_3);
+        notes[2][4] = view.findViewById(R.id.note_5_3);
+        notes[2][5] = view.findViewById(R.id.note_6_3);
+        notes[2][6] = view.findViewById(R.id.note_7_3);
+
+        notes[3][0] = view.findViewById(R.id.note_1_4);
+        notes[3][1] = view.findViewById(R.id.note_2_4);
+        notes[3][2] = view.findViewById(R.id.note_3_4);
+        notes[3][3] = view.findViewById(R.id.note_4_4);
+        notes[3][4] = view.findViewById(R.id.note_5_4);
+        notes[3][5] = view.findViewById(R.id.note_6_4);
+        notes[3][6] = view.findViewById(R.id.note_7_4);
+
+        notes[4][0] = view.findViewById(R.id.note_1_5);
+        notes[4][1] = view.findViewById(R.id.note_2_5);
+        notes[4][2] = view.findViewById(R.id.note_3_5);
+        notes[4][3] = view.findViewById(R.id.note_4_5);
+        notes[4][4] = view.findViewById(R.id.note_5_5);
+        notes[4][5] = view.findViewById(R.id.note_6_5);
+        notes[4][6] = view.findViewById(R.id.note_7_5);
+
+        /*noteNames*/
+
+        noteNames[0][0] = view.findViewById(R.id.note_1_1_name);
+        noteNames[0][1] = view.findViewById(R.id.note_2_1_name);
+        noteNames[0][2] = view.findViewById(R.id.note_3_1_name);
+        noteNames[0][3] = view.findViewById(R.id.note_4_1_name);
+        noteNames[0][4] = view.findViewById(R.id.note_5_1_name);
+        noteNames[0][5] = view.findViewById(R.id.note_6_1_name);
+        noteNames[0][6] = view.findViewById(R.id.note_7_1_name);
+
+        noteNames[1][0] = view.findViewById(R.id.note_1_2_name);
+        noteNames[1][1] = view.findViewById(R.id.note_2_2_name);
+        noteNames[1][2] = view.findViewById(R.id.note_3_2_name);
+        noteNames[1][3] = view.findViewById(R.id.note_4_2_name);
+        noteNames[1][4] = view.findViewById(R.id.note_5_2_name);
+        noteNames[1][5] = view.findViewById(R.id.note_6_2_name);
+        noteNames[1][6] = view.findViewById(R.id.note_7_2_name);
+
+        noteNames[2][0] = view.findViewById(R.id.note_1_3_name);
+        noteNames[2][1] = view.findViewById(R.id.note_2_3_name);
+        noteNames[2][2] = view.findViewById(R.id.note_3_3_name);
+        noteNames[2][3] = view.findViewById(R.id.note_4_3_name);
+        noteNames[2][4] = view.findViewById(R.id.note_5_3_name);
+        noteNames[2][5] = view.findViewById(R.id.note_6_3_name);
+        noteNames[2][6] = view.findViewById(R.id.note_7_3_name);
+
+        noteNames[3][0] = view.findViewById(R.id.note_1_4_name);
+        noteNames[3][1] = view.findViewById(R.id.note_2_4_name);
+        noteNames[3][2] = view.findViewById(R.id.note_3_4_name);
+        noteNames[3][3] = view.findViewById(R.id.note_4_4_name);
+        noteNames[3][4] = view.findViewById(R.id.note_5_4_name);
+        noteNames[3][5] = view.findViewById(R.id.note_6_4_name);
+        noteNames[3][6] = view.findViewById(R.id.note_7_4_name);
+
+        noteNames[4][0] = view.findViewById(R.id.note_1_5_name);
+        noteNames[4][1] = view.findViewById(R.id.note_2_5_name);
+        noteNames[4][2] = view.findViewById(R.id.note_3_5_name);
+        noteNames[4][3] = view.findViewById(R.id.note_4_5_name);
+        noteNames[4][4] = view.findViewById(R.id.note_5_5_name);
+        noteNames[4][5] = view.findViewById(R.id.note_6_5_name);
+        noteNames[4][6] = view.findViewById(R.id.note_7_5_name);
+
+
+
 
         courseMsgs[0][0] = new Course((TextView)view.findViewById(R.id.course_1_1_name),
                 (TextView) view.findViewById(R.id.course_1_1_place),(TextView)view.findViewById(R.id.course_1_1_property));

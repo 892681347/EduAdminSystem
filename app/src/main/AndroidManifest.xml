@@ -8,15 +8,19 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name="com.zyh.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.zyh.activities.About"
+        <activity android:name="com.zyh.activities.NoteActivity"
             android:theme="@style/AppTheme_2"/>
+        <activity
+            android:name="com.zyh.activities.About"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_2" />
 
         <service
             android:name="com.zyh.update.DownloadService"
@@ -25,8 +29,9 @@
 
         <activity
             android:name="com.zyh.activities.welcomeActivity"
-            android:theme="@style/AppTheme_2"
-            android:icon="@mipmap/ic_launcher">
+            android:icon="@mipmap/ic_launcher"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,11 +40,15 @@
         </activity>
         <activity
             android:name="com.zyh.activities.FeedbackActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme_2" />
-        <activity android:name="com.zyh.activities.MainActivity"
+        <activity
+            android:name="com.zyh.activities.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1" />
         <activity
             android:name="com.zyh.activities.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme_2" />
 
         <provider
@@ -51,11 +60,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver android:name="com.zyh.widget.TableWidgetProvider_1" >
+
+        <receiver android:name="com.zyh.widget.TableWidgetProvider_1">
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info" >
-            </meta-data>
+                android:resource="@xml/appwidget_provider_info"></meta-data>
 
             <intent-filter>
                 <action android:name="com.ryg.chapter_5.action.CLICK" />

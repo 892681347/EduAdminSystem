@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="AccountStroe"></dbname>
-    <version value="4"></version>
+    <version value="5"></version>
     <list>
         <mapping class="com.zyh.beans.Account"></mapping>
         <mapping class="com.zyh.beans.CourseList"></mapping>
+        <mapping class="com.zyh.beans.Note"></mapping>
     </list>
 </litepal>

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.kongzue.dialog.v2.TipDialog;
 import com.zyh.beans.LoginBean;
 import com.zyh.fragment.R;
 
@@ -120,7 +121,8 @@ public class FeedbackActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(FeedbackActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                TipDialog.show(FeedbackActivity.this, "提交成功", TipDialog.SHOW_TIME_SHORT, TipDialog.TYPE_FINISH);
+                content.setText("");
             }
         });
     }

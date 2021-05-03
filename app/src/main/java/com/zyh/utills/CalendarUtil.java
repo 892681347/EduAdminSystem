@@ -116,7 +116,7 @@ public class CalendarUtil {
         }
         else    //同一年
         {
-            System.out.println("判断day2 - day1 : " + (day2-day1));
+            //System.out.println("判断day2 - day1 : " + (day2-day1));
             return day2-day1;
         }
     }
@@ -146,27 +146,36 @@ public class CalendarUtil {
         else if(str.equals("星期六")) return 6;
         else  return 7;
     }
+    public static String getWeekday(int day){
+        if(day==1) return "周一";
+        else if(day==2) return "周二";
+        else if(day==3) return "周三";
+        else if(day==4) return "周四";
+        else if(day==5) return "周五";
+        else if(day==6) return "周六";
+        else  return "周日";
+    }
     public static int getNowWeek(String date1ate,int oldWeek){
-        int oldxq = getWeekday(date1ate);
-        int cha = 7-oldxq;
+        int ans = oldWeek;
+        int oldxq = getWeekday(date1ate); //旧星期
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = null;
+        Date oldDate = null;
         try {
-            date1 = sd.parse(date1ate);
+            oldDate = sd.parse(date1ate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Calendar   calendar = new GregorianCalendar();
-        calendar.setTime(date1);
-        calendar.add(calendar.DATE,7-oldxq+1); //把日期往后增加一天,整数  往后推,负数往前移动
-        date1=calendar.getTime();  //下周一日期
-        
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("yyyy-MM-dd");
-        Date date2 = new Date();// 获取当前时间
-        
-        int cha1 = differentDays(date1,date2);
-        if(cha1<0) return oldWeek; //没到下周一，返回原来周次
-        else return oldWeek+(cha1%7);
+        Date nowDate = new Date(); //今天日期
+        if(oldxq!=7){
+            if(differentDays(oldDate,nowDate)<7-oldxq) return ans; //在当周
+            else { //不在当周
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(oldDate);
+                calendar.add(calendar.DATE,7-oldxq); //把日期往后增加一天,正数往后推,负数往前移动
+                oldDate=calendar.getTime();  //下周天日期
+                ans+=1;//第二周
+                return ans + (differentDays(oldDate,nowDate) / 7);
+            }
+        }else return ans + (differentDays(oldDate,nowDate) / 7);
     }
 }

@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,12 +23,20 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.kongzue.dialog.util.TextInfo;
+import com.kongzue.dialog.v2.DialogSettings;
+import com.kongzue.dialog.v2.MessageDialog;
+import com.kongzue.dialog.v2.SelectDialog;
+import com.xuexiang.xui.XUI;
 import com.zyh.beans.Account;
 import com.zyh.beans.LoginBean;
+import com.zyh.beans.Note;
 import com.zyh.beans.Version;
 import com.zyh.beans.VersionBean;
 import com.zyh.fragment.R;
@@ -47,8 +57,11 @@ import okhttp3.Response;
 
 import static android.app.Notification.EXTRA_CHANNEL_ID;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
+import static com.kongzue.dialog.v2.DialogSettings.STYLE_IOS;
 
-public class welcomeActivity extends Activity {
+public class welcomeActivity extends AppCompatActivity {
+    private final String TAG = "welcomeActivity";
+    private Context context = welcomeActivity.this;
     private Timer timer;
     private DownloadService.DownloadBinder downloadBinder;
     private String downloadURL;
@@ -58,38 +71,19 @@ public class welcomeActivity extends Activity {
     private String account;
 
 
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            downloadBinder = (DownloadService.DownloadBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-    private AlertDialog.Builder builder;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        DialogSettings.style = STYLE_IOS;
+        DialogSettings.use_blur = true;
+        XUI.initTheme(this);
+
         postVersion();
-        serviceInit();
         if(ContextCompat.checkSelfPermission(welcomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(welcomeActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
-    }
-    private void serviceInit(){
-        Intent serviceIntent = new Intent(welcomeActivity.this,DownloadService.class);
-        if (Build.VERSION.SDK_INT >= 26) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
-        bindService(serviceIntent,connection,BIND_AUTO_CREATE);
-        Log.d("downloadBinder","init");
     }
     private void startNextActivity(){
         TimerTask delayTask = new TimerTask() {
@@ -174,73 +168,46 @@ public class welcomeActivity extends Activity {
             }
         });
     }
-    private void showNoticeForNone(){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            //数字是随便写的“40”，
-            nm.createNotificationChannel(new NotificationChannel("40", "App Service", NotificationManager.IMPORTANCE_DEFAULT));
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(welcomeActivity.this, "40");
-            builder.setSmallIcon(R.drawable.ic_launcher_background);
-            builder.setContentTitle("通了个知");
-            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-            builder.setContentText("别管这条通知，看了也白看");
-            //其中的2，是也随便写的，正式项目也是随便写
-            downloadBinder.startForegroundForNone(10 ,builder.build());
-        }
-    }
     private void showUpdateDialog(final String url) {
-        downloadURL = url;
-        builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("有新版本可用")
-                .setMessage("是否更新").setPositiveButton("更新", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startNextActivity();
-                        startDownloadAPK(url);
-                    }
-                }).setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        showNoticeForNone();
-                        startNextActivity();
-                        dialogInterface.dismiss();
-                    }
-                }).setNeutralButton("手动更新", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse("http://42.193.177.76:8081/apk/CSUST.apk"));
-                        startActivity(intent);
-                        showNoticeForNone();
-                        startNextActivity();
-                        dialog.dismiss();
-                    }
-                });
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                 AlertDialog alertDialog = builder.create();
-                 alertDialog.setCanceledOnTouchOutside(false);
-                 alertDialog.show();
+                SelectDialog.show(context, "有新版本可用", "是否更新", "更新", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                        startNextActivity();
+                    }
+                }, "下次再说", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startNextActivity();
+                    }
+                });
             }
         });
     }
     private void showFirstUseDialog(){
-        builder = new AlertDialog.Builder(this).setIcon(R.mipmap.ic_launcher).setTitle("新版本介绍")
-                .setMessage("当前版本新特性:\n\n" +
-                        "\t\t1.新增课表桌面小部件\n\n\t\t2.ui界面优化\n\n\t\t3.算法更新-同课程颜色相同\n\n\t\t4.课表存入本地数据库" +
-                        "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startNextActivity();
-                    }
-                });
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog alertDialog = builder.create();
-                alertDialog.setCancelable(false);
-                alertDialog.show();
+                MessageDialog.build(welcomeActivity.this, "新版本介绍\n", "当前版本新特性:\n\n" +
+                                "\t\t1.新增课表桌面小部件\n\n\t\t2.ui界面优化\n\n\t\t3.算法更新-同课程颜色相同\n\n\t\t4.课表存入本地数据库" +
+                                "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！\n", "知道了",
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startNextActivity();
+                    }
+                }).setTitleTextInfo(new TextInfo()
+                        .setGravity(Gravity.START)
+                        .setBold(true)
+                ).setContentTextInfo(new TextInfo()
+                        .setGravity(Gravity.START)
+                ).showDialog();
+
             }
         });
     }
@@ -259,7 +226,6 @@ public class welcomeActivity extends Activity {
                     SharedPreferences sharedPreferences = getSharedPreferences("FirstRun",MODE_PRIVATE);
                     boolean first_run = sharedPreferences.getBoolean("isFirstRun",true);
                     if (!Version.isNeedUpdate(versionBean.getData().getVersionName())){
-                        showNoticeForNone();
                         if (first_run){
                             sharedPreferences.edit().putBoolean("isFirstRun",false).apply();
                             showFirstUseDialog();
@@ -288,71 +254,6 @@ public class welcomeActivity extends Activity {
             default:
         }
     }
-
-    protected void onDestroy(){
-        super.onDestroy();
-        unbindService(connection);
-
-    }
-    private void startDownloadAPK(final String url){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (!checkNotifySetting()){
-                    Toast.makeText(welcomeActivity.this,"请务必打开通知权限，否则无法更新",Toast.LENGTH_SHORT).show();
-                    openNotityRight();
-                    status = NOTICE;
-                    return;
-                }
-                if (downloadBinder==null){
-                    Log.d("downloadBinder","null");
-                    return;
-                }
-                downloadBinder.startDownload(url);
-            }
-        });
-    }
-    private boolean checkNotifySetting() {
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-        // areNotificationsEnabled方法的有效性官方只最低支持到API 19，低于19的仍可调用此方法不过只会返回true，即默认为用户已经开启了通知。
-        boolean isOpened = manager.areNotificationsEnabled();
-        return isOpened;
-    }
-    public void openNotityRight(){
-        try {
-            // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
-            intent.putExtra(EXTRA_APP_PACKAGE, getPackageName());
-            intent.putExtra(EXTRA_CHANNEL_ID, getApplicationInfo().uid);
-
-            //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
-            intent.putExtra("app_package", getPackageName());
-            intent.putExtra("app_uid", getApplicationInfo().uid);
-
-            // 小米6 -MIUI9.6-8.0.0系统，是个特例，通知设置界面只能控制"允许使用通知圆点"——然而这个玩意并没有卵用，我想对雷布斯说：I'm not ok!!!
-            //  if ("MI 6".equals(Build.MODEL)) {
-            //      intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            //      Uri uri = Uri.fromParts("package", getPackageName(), null);
-            //      intent.setData(uri);
-            //      // intent.setAction("com.android.settings/.SubSettings");
-            //  }
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 出现异常则跳转到应用设置界面：锤子坚果3——OC105 API25
-            Intent intent = new Intent();
-
-            //下面这种方案是直接跳转到当前应用的设置界面。
-            //https://blog.csdn.net/ysy950803/article/details/71910806
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package", getPackageName(), null);
-            intent.setData(uri);
-            startActivity(intent);
-        }
-    }
-
     @Override
     protected void onPause() {
         Log.d("welcomActivity","onPause");
@@ -367,14 +268,6 @@ public class welcomeActivity extends Activity {
         Log.d("welcomActivity","onResume");
         if (timer!=null){
             startNextActivity();
-        }
-        if (status==NOTICE){
-            if (!checkNotifySetting()){
-                Toast.makeText(welcomeActivity.this,"未打开通知权限无法更新",Toast.LENGTH_SHORT).show();
-            }
-            Log.d("NOTICE","startDownload");
-            downloadBinder.startDownload(downloadURL);
-            status = 0;
         }
         super.onResume();
     }
