@@ -178,4 +178,22 @@ public class CalendarUtil {
             }
         }else return ans + (differentDays(oldDate,nowDate) / 7);
     }
+
+    /**
+     * 13位时间戳转换成"yyyy-MM-dd HH:mm:ss"
+     * @param time
+     * @return
+     */
+    public static String timeStamp2Date(String time) {
+        Long timeLong = Long.parseLong(time);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");//要转换的时间格式
+        Date date;
+        try {
+            date = sdf.parse(sdf.format(timeLong));
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

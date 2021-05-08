@@ -80,5 +80,5 @@
         android:padding="5dp"
         android:textSize="10sp"
         android:gravity="center"
-        android:text="Tip:长按桌面可添加桌面小部件"/>
+        android:text="Tip:点击课表空白处可备注\t\t长按桌面可添加桌面小部件"/>
 </LinearLayout>

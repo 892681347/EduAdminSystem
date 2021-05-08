@@ -15,17 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.zyh.activities.NoteActivity"
+        <activity android:name="com.zyh.activities.NoticeActivity"
             android:theme="@style/AppTheme_2"/>
+        <activity
+            android:name="com.zyh.activities.NoteActivity"
+            android:theme="@style/AppTheme_2" />
         <activity
             android:name="com.zyh.activities.About"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_2" />
-
-        <service
-            android:name="com.zyh.update.DownloadService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name="com.zyh.activities.welcomeActivity"
@@ -51,20 +49,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_2" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="长理教务v3.1.0.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <receiver android:name="com.zyh.widget.TableWidgetProvider_1">
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info"></meta-data>
+                android:resource="@xml/appwidget_provider_info" />
 
             <intent-filter>
                 <action android:name="com.ryg.chapter_5.action.CLICK" />

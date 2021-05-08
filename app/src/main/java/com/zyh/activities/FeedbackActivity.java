@@ -2,6 +2,7 @@ package com.zyh.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kongzue.dialog.v2.TipDialog;
-import com.zyh.beans.LoginBean;
+import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
 import com.zyh.fragment.R;
 
 import okhttp3.FormBody;

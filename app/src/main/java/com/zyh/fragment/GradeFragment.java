@@ -1,21 +1,26 @@
 package com.zyh.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kongzue.dialog.util.TextInfo;
+import com.kongzue.dialog.v2.MessageDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
 import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener;
 import com.zyh.activities.MainActivity;
+import com.zyh.activities.welcomeActivity;
 import com.zyh.beans.GradeBean;
 import com.zyh.beans.LoginBean;
 import com.zyh.recyclerView.GradeAdapter;
@@ -159,6 +164,10 @@ public class GradeFragment extends Fragment {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    if(responseData.contains("评教")){
+                        showPingJiaoDialog();
+                        return;
+                    }
                     GradeBean gradeBean = Utills.parseJSON(responseData, GradeBean.class);
                     System.out.println("123456    "+gradeBean.getData());
                     gradeList = gradeBean.getData();
@@ -169,6 +178,21 @@ public class GradeFragment extends Fragment {
                 }
             }
         }).start();
+    }
+    private void showPingJiaoDialog(){
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MessageDialog.build(mainActivity, "请先评教\n", "请先在教务系统中完成评教\n",
+                        "知道了",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).showDialog();
+
+            }
+        });
     }
     private void showGradeRecyclerView(){
         final String cookie = loginBean.getData().getCookie();

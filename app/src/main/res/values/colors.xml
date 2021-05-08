@@ -22,4 +22,5 @@
     <color name="add_note_subtitle" >#4c4c4c</color>
     <color name="add_note_content" >#000000</color>
     <color name="note" >#b2c8da</color>
+    <color name="notice_item_read">#299ee7</color>
 </resources>

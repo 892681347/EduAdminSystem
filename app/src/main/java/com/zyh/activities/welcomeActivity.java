@@ -40,11 +40,11 @@ import com.zyh.beans.Note;
 import com.zyh.beans.Version;
 import com.zyh.beans.VersionBean;
 import com.zyh.fragment.R;
-import com.zyh.update.DownloadService;
 import com.zyh.utills.Utills;
 
 import org.litepal.LitePal;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,7 +63,6 @@ public class welcomeActivity extends AppCompatActivity {
     private final String TAG = "welcomeActivity";
     private Context context = welcomeActivity.this;
     private Timer timer;
-    private DownloadService.DownloadBinder downloadBinder;
     private String downloadURL;
     private final int NOTICE = 1;
     private int status = 0;
@@ -111,7 +110,7 @@ public class welcomeActivity extends AppCompatActivity {
             }
         };
         timer = new Timer();
-        timer.schedule(delayTask,1500);
+        timer.schedule(delayTask,750);
     }
     private void startLoginActivity(){
         Intent intent = new Intent(welcomeActivity.this,LoginActivity.class);
@@ -142,6 +141,8 @@ public class welcomeActivity extends AppCompatActivity {
                     Log.d("LoginActivity","responseData:  "+responseData);
                     LoginBean loginBean = Utills.parseJSON(responseData,LoginBean.class);
                     loginHandle(loginBean);
+                }catch (SocketTimeoutException e){
+                    showTimeoutDialog();
                 }catch (Exception e) {
                     Log.d("okHttpError","okHttpError");
                     e.printStackTrace();
@@ -149,11 +150,30 @@ public class welcomeActivity extends AppCompatActivity {
             }
         }).start();
     }
+    private void showTimeoutDialog(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MessageDialog.build(welcomeActivity.this, "登录超时", "\n也许是教务系统官网出现了问题...\n" +
+                                "请确保教务系统官网能够访问\n亦或是保存的账号密码出现了问题，可尝试清除应用数据后重新打开应用", "知道了",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startLoginActivity();
+                            }
+                        }).showDialog();
+
+            }
+        });
+    }
     private void loginHandle(LoginBean loginBean){
         String code = loginBean.getCode();
         if(code.equals("200")){
             Intent intent = new Intent(welcomeActivity.this,MainActivity.class);
             MainActivity.actionStart(this, loginBean,account);
+        }else if(code.equals("401")){
+            showToast("账号或密码错误");
+            startLoginActivity();
         }else if (code.equals("501")){
             showToast("服务器错误，请联系开发人员");
         }else {//502
@@ -194,7 +214,7 @@ public class welcomeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 MessageDialog.build(welcomeActivity.this, "新版本介绍\n", "当前版本新特性:\n\n" +
-                                "\t\t1.新增课表桌面小部件\n\n\t\t2.ui界面优化\n\n\t\t3.算法更新-同课程颜色相同\n\n\t\t4.课表存入本地数据库" +
+                                "\t\t1.ui界面优化\n\n\t\t2.增加课表备注功能\n\n\t\t3.增加通知功能" +
                                 "\n\n如果有任何建议欢迎反馈给我们，谢谢支持！\n", "知道了",
                         new DialogInterface.OnClickListener() {
                     @Override

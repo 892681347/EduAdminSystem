@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--描边设置-->
+    <stroke android:color="@color/notice_item_read"
+        android:width="3px"
+        />
+
+
+    <!--圆角设置-->
+    <corners android:radius="6dp"/>
+
+</shape>

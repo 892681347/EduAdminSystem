@@ -2,6 +2,7 @@ package com.zyh.activities;
 
 
 import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.kongzue.dialog.util.TextInfo;
+import com.kongzue.dialog.v2.MessageDialog;
 import com.zyh.beans.Account;
 import com.zyh.beans.LoginBean;
 import com.zyh.beans.Version;
@@ -28,6 +32,7 @@ import com.zyh.utills.Utills;
 
 import org.litepal.LitePal;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -140,12 +145,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.d("LoginActivity","responseData:  "+responseData);
                     LoginBean loginBean = Utills.parseJSON(responseData,LoginBean.class);
                     loginHandle(loginBean,username,password);
-                }catch (Exception e) {
+                }catch (SocketTimeoutException e){
+                    showTimeoutDialog();
+                    waitEnd();
+                } catch (Exception e) {
                     Log.d("okHttpError","okHttpError");
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+    private void showTimeoutDialog(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MessageDialog.build(LoginActivity.this, "登录超时\n", "也许是教务系统官网出现了问题...\n" +
+                                "请确保教务系统官网能够访问\n", "知道了",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).showDialog();
+
+            }
+        });
     }
     private void loginHandle(LoginBean loginBean, String username, String password){
         String code;

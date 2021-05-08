@@ -48,6 +48,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -995,6 +996,7 @@ public class Utills {
             for(int i=1;i<=20;i++){
                 Log.i(TAG,"this couList "+i+" is "+couList.getCourseResponseDatas().get(i));
                 CourseBean courseBean = Utills.parseJSON(couList.getCourseResponseDatas().get(i),CourseBean.class);
+                if(courseBean==null) Log.i(TAG,"courseBean is null, couList[i]: "+couList.getCourseResponseDatas().get(i));
                 if(((TimetableFragment)timetableFragment).semester.equals(semester)){
                     ((TimetableFragment)timetableFragment).courseLists.set(i,courseBean.getData());
                     ((TimetableFragment) timetableFragment).isFinished[i] = true;

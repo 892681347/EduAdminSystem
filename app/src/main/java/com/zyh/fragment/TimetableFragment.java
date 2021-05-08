@@ -166,6 +166,7 @@ public class TimetableFragment extends Fragment {
                     @Override
                     public void run() {
                         initDatas();
+                        //mAdapter.notifyDataSetChanged();
                         Utills.showIsNowWeek(datas[timetableSelectOption],originalSemester,isNowWeek,selectedWeek,nowWeek);
                     }
                 });

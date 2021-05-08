@@ -38,6 +38,29 @@
             android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <ImageView
+            android:id="@+id/notice_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/notice"/>
+        <ImageView
+            android:id="@+id/notice_pot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/dot"
+            android:layout_alignRight="@+id/notice_img"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
 
 
 </RelativeLayout>

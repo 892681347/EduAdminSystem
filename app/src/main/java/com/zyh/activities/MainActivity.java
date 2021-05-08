@@ -19,12 +19,17 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xuexiang.xui.XUI;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.zyh.beans.LoginBean;
 import com.zyh.beans.SemesterBean;
 import com.zyh.fragment.ExamFragment;
@@ -33,6 +38,7 @@ import com.zyh.fragment.IndividualFragment;
 import com.zyh.fragment.R;
 import com.zyh.fragment.TimetableFragment;
 import com.zyh.utills.Utills;
+import com.zyh.utills.WebSocketUtils;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +46,7 @@ import okhttp3.Response;
 
 public class MainActivity extends FragmentActivity implements OnClickListener {
     private long exitTime = 0;
-
+    private String token;
     private TextView topNmae;
 
     //声明四个Tab的布局文件
@@ -68,10 +74,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
     private Fragment mFragIndividual;
 
     private LinearLayout addFeedback;
+    private RelativeLayout notice;
+    private ImageView pot;
 
     public LoginBean loginBean;
     public String username;
     public String[] semesters;
+
+    private WebSocketUtils websocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +97,31 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         loginBean = (LoginBean) intent.getSerializableExtra("loginBean");
         username = intent.getStringExtra("username");
         Log.d("MainActivity","ActionBegin:Already get loginBean");
-        postSemester(loginBean.getData().getToken());
+        token = loginBean.getData().getToken();
+        postSemester(token);
         initViews();//初始化控件
         initEvents();//初始化事件
         selectTab(0);//默认选中第一个Tab
         addFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FeedbackActivity.actionStart(MainActivity.this,loginBean.getData().getToken());
+                FeedbackActivity.actionStart(MainActivity.this,token);
             }
         });
+        notice.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,NoticeActivity.class);
+                startActivity(intent);
+            }
+        });
+//        final GuideCaseView guideStep1 = new GuideCaseView.Builder(MainActivity.this)
+//                .title("左右滑动切换周次")
+//                .build();
+//        new GuideCaseQueue()
+//                .add(guideStep1)
+//                .show();
+        websocket = new WebSocketUtils(MainActivity.this, token, pot);
     }
 
 
@@ -137,6 +162,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 
         topNmae = (TextView)findViewById(R.id.top_name);
         addFeedback = (LinearLayout)findViewById(R.id.addFeedback) ;
+        notice = findViewById(R.id.notice);
+        pot = findViewById(R.id.notice_pot);
     }
 
     //处理Tab的点击事件
@@ -175,6 +202,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 mTextTimetable.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("课程表");
                 addFeedback.setVisibility(View.INVISIBLE);
+                notice.setVisibility(View.VISIBLE);
                 //如果微信对应的Fragment没有实例化，则进行实例化，并显示出来
                 if (mFragTimetable == null) {
                     mFragTimetable = new TimetableFragment();
@@ -189,6 +217,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 mTextGrade.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("成绩");
                 addFeedback.setVisibility(View.INVISIBLE);
+                notice.setVisibility(View.INVISIBLE);
                 if (mFragGrade == null) {
                     mFragGrade = new GradeFragment();
                     transaction.add(R.id.id_content, mFragGrade);
@@ -201,6 +230,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 mTextExam.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("考试");
                 addFeedback.setVisibility(View.INVISIBLE);
+                notice.setVisibility(View.INVISIBLE);
                 if (mFragExam == null) {
                     mFragExam = new ExamFragment();
                     transaction.add(R.id.id_content, mFragExam);
@@ -213,6 +243,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
                 mTextIndividual.setTextColor(getResources().getColor(R.color.colorMain));
                 topNmae.setText("我的");
                 addFeedback.setVisibility(View.VISIBLE);
+                notice.setVisibility(View.INVISIBLE);
                 if (mFragIndividual == null) {
                     mFragIndividual = new IndividualFragment();
                     transaction.add(R.id.id_content, mFragIndividual);
@@ -283,6 +314,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        WebSocketUtils.hasUnReadMessage(MainActivity.this, pot);
+        WebSocketUtils.getUnReadMessage(token);
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        websocket.close();
+        super.onDestroy();
     }
 }
 
